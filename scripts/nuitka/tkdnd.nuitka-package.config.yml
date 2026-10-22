@@ -1,0 +1,21 @@
+# Extend Nuitka's Tcl 8 rules with the Windows Tcl 9 binaries.
+# DLLs are native dependencies, not data files. Tcl scripts stay beside them.
+- module-name: 'tkinterdnd2'
+  data-files:
+    - patterns:
+        - 'tkdnd/win-x64-tcl9/*.tcl'
+      when: 'win32 and arch_amd64'
+    - patterns:
+        - 'tkdnd/win-x86-tcl9/*.tcl'
+      when: 'win32 and arch_x86'
+  dlls:
+    - from_filenames:
+        relative_path: 'tkdnd/win-x64-tcl9'
+        prefixes:
+          - 'libtkdnd'
+      when: 'win32 and arch_amd64'
+    - from_filenames:
+        relative_path: 'tkdnd/win-x86-tcl9'
+        prefixes:
+          - 'libtkdnd'
+      when: 'win32 and arch_x86'
