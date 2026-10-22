@@ -31,7 +31,9 @@ rtf_pocket_guide_book_repo/
 *.db
 .env
 *.jpg
+!docs/images/plain-rtf-screenshot.jpg
 *.rtf
 H:\documents\programming\work\plaintxtoffice\rtf_editor\dev-docs\packaging\nuitka\installing_nuitka.md
 dev-docs/rtf_repo_reference/logo.png
 .project-memory/hooks.log
+dev-docs/specs/GITHUB_README.md
