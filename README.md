@@ -13,7 +13,9 @@ embedded images. Its window is named **RTF Editor**.
 format, identified by `PTRTF/1`. They normally have an `.rtf` extension, but
 they are **not Microsoft RTF files**.
 
-[User manual](docs/USER_MANUAL.md) · [Build guide](scripts/nuitka/README.md)
+[User manual](docs/USER_MANUAL.md) ·
+[Format specification](docs/PLAIN_RTF_SPEC.md) ·
+[Build guide](scripts/nuitka/README.md)
 
 ## Screenshot
 

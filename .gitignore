@@ -37,3 +37,6 @@ H:\documents\programming\work\plaintxtoffice\rtf_editor\dev-docs\packaging\nuitk
 dev-docs/rtf_repo_reference/logo.png
 .project-memory/hooks.log
 dev-docs/specs/GITHUB_README.md
+packaging/advanced-installer/**
+!packaging/advanced-installer/plain-rtf.aip
+
