@@ -1,27 +1,42 @@
 <!-- last_updated: 2026-11-09 -->
+<!-- Authoring guidance: dev-docs/specs/README_SPEC.instructions.md -->
+<!-- rumdl-disable MD033 MD041 -->
+<p align="center">
+  <img src="assets/icons/plain_rtf.svg" alt="Plain RTF icon: a document page with the letters Aa" width="96">
+</p>
 
-# Plain RTF
+<h1 align="center">Plain RTF</h1>
 
-![Plain RTF icon](assets/icons/plain_rtf.svg)
+<p align="center">
+  A lightweight editor for formatted notes, saved as plain text you can still
+  read in any editor.
+</p>
 
-A super lightweight Plain Text RTF editor.
+<p align="center">
+  <a href="https://github.com/PlainTxtOffice/plain-rtf/releases/latest"><img src="https://img.shields.io/github/v/release/PlainTxtOffice/plain-rtf?label=release" alt="Latest release"></a>
+  <a href="#download"><img src="https://img.shields.io/badge/platforms-Windows%20%7C%20Android-informational" alt="Platforms: Windows and Android"></a>
+</p>
 
-Plain RTF is a cross-platform app for quick notes with text formatting and
-embedded images.
+<p align="center">
+  <a href="#download">Download</a> ·
+  <a href="docs/USER_MANUAL.md">User manual</a> ·
+  <a href="docs/PLAIN_RTF_SPEC.md">Format specification</a> ·
+  <a href="https://plaintxtoffice.com/apps/plain-rtf/">Website</a>
+</p>
+<!-- rumdl-enable MD033 MD041 -->
 
-**File compatibility:** documents use the app's own UTF-8 **Plain Text RTF**
-format, identified by `PTRTF/1`. They normally have an `.rtf` extension, but
-they are **not Microsoft RTF files**.
+---
 
-[User manual](docs/USER_MANUAL.md) ·
-[Format specification](docs/PLAIN_RTF_SPEC.md) · [License](LICENSE)
+## About
 
-## Screenshot
+Plain RTF is an app for quick notes with text formatting and embedded images,
+for Windows and Android. Notes are saved wherever you choose, in a documented
+plain-text format.
 
-[![Plain RTF displaying formatted text, a list, and an embedded image](docs/images/plain-rtf-screenshot.jpg)](docs/images/plain-rtf-screenshot.jpg)
-
-*A sample note in Plain RTF on Windows. Click the screenshot to view it full
-size.*
+Documents use the app's own UTF-8 **Plain Text RTF** format, identified by
+`PTRTF/1`. They normally have an `.rtf` extension, but they are **not Microsoft
+RTF files**. See the [format specification](docs/PLAIN_RTF_SPEC.md) for the
+full syntax.
 
 ## Features
 
@@ -30,49 +45,28 @@ size.*
 - Bulleted and numbered lists, plus simple text tables.
 - Embedded PNG and JPEG images, including image paste on Windows.
 - File drag-and-drop and familiar keyboard shortcuts.
-- Portable executable and installer-oriented standalone build options.
 
-## Getting started
+## App Screenshot
 
-## Windows Portable App
+[![Plain RTF displaying formatted text, a list, and an embedded image](docs/images/plain-rtf-screenshot.jpg)](docs/images/plain-rtf-screenshot.jpg)
 
-For a portable build, place `plain-rtf.exe` in a writable folder and
-double-click it. Python does not need to be installed on the computer running
-the EXE.
+*A sample note in Plain RTF on Windows. Click the screenshot to view it full
+size.*
 
-## Windows Installer
+## Download
 
-The portable app keeps its logs and temporary extracted files in
-`plain-rtf-data/` beside the executable. Extraction files are removed on normal
-exit; logs remain. Renaming the executable changes the corresponding data
-folder name. Portable storage does not fall back to AppData.
+| Platform | Download | Notes |
+| --- | --- | --- |
+| Windows (portable) | [plain-rtf.exe](https://github.com/PlainTxtOffice/plain-rtf/releases/latest/download/plain-rtf.exe) | Runs without installation. |
+| Windows (installer) | [Latest release](https://github.com/PlainTxtOffice/plain-rtf/releases/latest) | Choose the setup executable. |
+| Android | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) | |
 
-## Android
+The Windows builds are for x64 (64-bit) and do not need Python installed.
 
-Download Plain RTF from the [Google Play Store](https://play.google.com/store/apps/details?id=com.plaintextoffice.plain_rtf)
+## User Manual
 
-
-## Usage
-
-1. Create a note with **File > New**, or open one with **File > Open...**.
-1. Select text and use the **Format** menu to apply formatting.
-1. Choose **Format > Insert Image...** to add an image.
-1. Save with **Ctrl+S**. Use **Ctrl+Shift+S** to save under another name.
-
-**Ctrl+B**, **Ctrl+I**, and **Ctrl+U** apply bold, italic, and underline to
-selected text. Documents are saved when you request a save; there is no
-automatic saving or recovery copy.
-
-See the [user manual](docs/USER_MANUAL.md) for complete instructions, shortcuts,
-file-format details, and troubleshooting. The app's **Help** menu also lists
-keyboard shortcuts and supported formatting.
-
-## Contributing
-
-When reporting a bug, include the steps to reproduce it, the expected behavior,
-the actual behavior, and any error message. State whether you ran from source,
-a portable executable, or an installed application. Share a small example
-document with private information removed when it helps reproduce the problem.
+See the [User Manual](docs/USER_MANUAL.md) for setup, usage, keyboard
+shortcuts, file-format details, and troubleshooting.
 
 ## License
 
