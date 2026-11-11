@@ -58,7 +58,7 @@ size.*
 | Platform | Download | Notes |
 | --- | --- | --- |
 | Windows (portable) | [plain-rtf.exe](https://github.com/PlainTxtOffice/plain-rtf/releases/latest/download/plain-rtf.exe) | Runs without installation. |
-| Windows (installer) | [Latest release](https://github.com/PlainTxtOffice/plain-rtf/releases/latest) | Choose the setup executable. |
+| Windows (installer) | [plain-rtf-setup.exe](https://github.com/PlainTxtOffice/plain-rtf/releases/latest/download/plain-rtf-setup.exe) | |
 | Android | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) | |
 
 The Windows builds are for x64 (64-bit) and do not need Python installed.
