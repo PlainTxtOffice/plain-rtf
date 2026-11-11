@@ -21,7 +21,7 @@
   <a href="#download">Download</a> ·
   <a href="docs/USER_MANUAL.md">User manual</a> ·
   <a href="docs/PLAIN_RTF_SPEC.md">Format specification</a> ·
-  <a href="https://plaintxtoffice.com/apps/plain-rtf/">Website</a>
+  <a href="https://plaintxtoffice.com/apps/">Website</a>
 </p>
 <!-- rumdl-enable MD033 MD041 -->
 
