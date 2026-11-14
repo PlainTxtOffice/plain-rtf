@@ -1,10 +1,10 @@
 ---
-last_updated: 2026-11-06
+last_updated: 2026-11-13
 version: 3.1.1
 product_versions:
   windows: "0.1.0"
   ios: "1.0"
-  android: "1.0.1"
+  android: "1.0.2"
 generated_from: "dev-docs/specs/USER_MANUAL_SPEC.instructions.md"
 ---
 
@@ -12,48 +12,81 @@ generated_from: "dev-docs/specs/USER_MANUAL_SPEC.instructions.md"
 
 ## Overview
 
-Plain RTF, named **RTF Editor** in its window, is a desktop editor for people
-writing quick rich-text notes on Windows. It supports text formatting, lists,
-simple tables, and embedded images through a graphical interface. Terminal
-commands launch that same interface. This manual covers everyday use;
-installation and setup are not covered.
-<!-- Verified from: platform/windows/pyproject.toml [project]; platform/windows/plain_rtf/gui/menus/help.py [ABOUT_TEXT]; platform/windows/plain_rtf/main.py [main] -->
+Plain RTF is an editor for people writing quick rich-text notes on Windows
+and Android. It supports text formatting, lists, simple tables, and embedded
+images through a graphical interface. On Windows it is a desktop program,
+named **RTF Editor** in its window, which can also be started from a terminal.
+On Android it is an app named **Plain RTF**. This manual covers installation
+and everyday use on both.
+<!-- Verified from: platform/windows/pyproject.toml [project]; platform/windows/plain_rtf/gui/menus/help.py [ABOUT_TEXT]; platform/windows/plain_rtf/main.py [main]; platform/android/app/src/main/res/values/strings.xml [app_name, help_about_body]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/PlainRtfApp.kt [PlainRtfApp] -->
 
 Documents use the application's **Plain Text RTF** format. Although filenames
 normally end in `.rtf`, these are UTF-8 text files beginning with `PTRTF/1`.
 They are not Microsoft RTF documents and cannot be exchanged as Microsoft RTF.
 <!-- Verified from: platform/windows/plain_rtf/gui/menus/help.py [RTF_SUPPORT_TEXT]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [FORMAT_HEADER, parse_plain_text_rtf] -->
 
+## Installation and Setup
+
+| Platform | Requirements | Where to get it |
+| --- | --- | --- |
+| Windows | An x64 (64-bit) PC. The minimum Windows version is Unknown. | [Latest release](https://github.com/PlainTxtOffice/plain-rtf/releases/latest) |
+| Android | Android 9 or later. | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) |
+<!-- Verified from: README.md [Download]; platform/windows/scripts/advanced_installer/build_installer.ps1 [Read-ExeArchitecture]; platform/android/app/build.gradle.kts [applicationId, minSdk] -->
+
+### Install on Windows
+
+The release offers two downloads. Use either one:
+
+- `plain-rtf-setup.exe` installs the program on the computer.
+- `plain-rtf.exe` is a portable program that runs without installation.
+
+To use the installer:
+
+1. Download `plain-rtf-setup.exe` from the latest release.
+1. Run it and follow its prompts. It needs administrator permission, and it
+   installs the program for every user of the computer under `Program Files`.
+1. Find the program in the **Plain RTF** folder of the Start menu.
+
+To use the portable program:
+
+1. Download `plain-rtf.exe` from the latest release.
+1. Move it to a folder you are allowed to write to. It keeps its diagnostic
+   log in a `plain-rtf-data/` folder beside itself.
+<!-- Verified from: README.md [Download]; platform/windows/scripts/advanced_installer/README.md [Persistent Installer Project]; platform/windows/packaging/advanced-installer/plain-rtf.aip [ALLUSERS, SET_APPDIR, SET_SHORTCUTDIR, Shortcut]; platform/windows/plain_rtf/config/path_handler.py [_look_runtime_storage] -->
+
+### Install on Android
+
+1. Open
+   [Plain RTF on Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf).
+1. Install the app.
+
+The app does not request internet access.
+<!-- Verified from: README.md [Download]; platform/android/app/build.gradle.kts [applicationId]; platform/android/app/src/main/AndroidManifest.xml; platform/android/app/src/main/res/values/strings.xml [privacy_services_body] -->
+
 ## Starting the Program
 
-From the `platform/windows/` folder, run:
+### Start on Windows
+
+Open **Plain RTF** from the Start menu if you used the installer, or
+double-click the portable `plain-rtf.exe`. The program opens an empty document
+titled **Untitled - RTF Editor**. The status bar shows **New document** and
+**0 characters**.
+<!-- Verified from: platform/windows/packaging/advanced-installer/plain-rtf.aip [Shortcut]; platform/windows/plain_rtf/main.py [main]; platform/windows/plain_rtf/gui/views/root_window.py [__init__, _update_title, _set_saved_state, _update_char_count] -->
+
+To open an existing document immediately, start the program from a terminal
+and supply the document's path as the first argument. Run the command from the
+folder that holds `plain-rtf.exe`; the installer's default is
+`C:/Program Files/Plain Text Office LLC/Plain RTF/`. Quote paths containing
+spaces:
 
 ```powershell
-.venv/Scripts/python.exe -m plain_rtf.main
-```
-
-The installed command is:
-
-```powershell
-plain-rtf
-```
-
-Both open an empty document titled **Untitled - RTF Editor**. The status bar
-shows **New document** and **0 characters**.
-<!-- Verified from: platform/windows/pyproject.toml [project.gui-scripts]; platform/windows/plain_rtf/main.py [main]; platform/windows/plain_rtf/gui/views/root_window.py [__init__, _update_title, _set_saved_state, _update_char_count] -->
-
-To open an existing document immediately, supply its path as the first
-argument. Quote paths containing spaces:
-
-```powershell
-.venv/Scripts/python.exe -m plain_rtf.main "C:/Users/YourName/Documents/My notes.rtf"
-plain-rtf "C:/Users/YourName/Documents/My notes.rtf"
+./plain-rtf.exe "C:/Users/YourName/Documents/My notes.rtf"
 ```
 
 Use an existing Plain Text RTF file. Relative paths are relative to the folder
 from which you launch the command. An unsuccessful startup open shows
 **Open failed** and leaves an empty document available.
-<!-- Verified from: platform/windows/plain_rtf/main.py [_get_startup_path]; platform/windows/plain_rtf/adapters/files.py [read_rtf]; platform/windows/plain_rtf/gui/views/root_window.py [__init__, _open_path] -->
+<!-- Verified from: platform/windows/pyproject.toml [executable-name]; platform/windows/packaging/advanced-installer/plain-rtf.aip [SET_APPDIR, File plain-rtf.exe]; platform/windows/plain_rtf/main.py [_get_startup_path]; platform/windows/plain_rtf/adapters/files.py [read_rtf]; platform/windows/plain_rtf/gui/views/root_window.py [__init__, _open_path] -->
 
 To quit, choose **File > Exit** or close the window. If prompted to save,
 choose **Yes** to save first, **No** to discard unsaved changes, or **Cancel**
@@ -61,12 +94,29 @@ to keep working. Canceling the save dialog or failing to save also stops the
 close operation.
 <!-- Verified from: platform/windows/plain_rtf/gui/menus/file.py [build_file_menu]; platform/windows/plain_rtf/gui/views/root_window.py [_on_close, _prompt_for_unsaved_changes, _save_document_as] -->
 
+### Start on Android
+
+Tap the **Plain RTF** icon. The Home screen offers **Create New Document** and
+**Open Existing**, and lists any **Recovery drafts**. You can also open an
+`.rtf` file from another app, such as a file manager, and choose Plain RTF
+when Android offers it. Unsaved changes in a document that was already open
+stay in its recovery draft.
+<!-- Verified from: platform/android/app/src/main/AndroidManifest.xml [intent-filter]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/MainActivity.kt [openViewedDocument]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [openExternal]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen] -->
+
+To leave a document, tap **Back** in the top bar. If it has unsaved changes,
+choose **Save**, **Keep Draft and Close**, **Discard Changes**, or **Cancel**.
+There is no quit command; leave the app as you leave any Android app. Unsaved
+changes are written to a recovery draft when the app leaves the screen.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen, CloseWarningDialog]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [closeIfSaved, keepDraftAndClose, discardAndClose, onAppStopped] -->
+
 ## Getting Around
 
-The window holds one document at a time. Click in the main text area to place
-the insertion cursor, type, or select text. Text wraps at word boundaries;
-use the vertical scrollbar to move through a longer document.
-<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_build_editor, _load_document] -->
+Plain RTF holds one document at a time. Click or tap in the main text area to
+place the insertion cursor, type, or select text. Text wraps at word boundaries;
+scroll to move through a longer document.
+<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_build_editor, _load_document]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [activate]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen] -->
+
+The Windows window has these areas:
 
 | Area | What it tells you or lets you do |
 | --- | --- |
@@ -78,6 +128,21 @@ use the vertical scrollbar to move through a longer document.
 | Status bar, right | Counts document characters; each embedded image counts as one. |
 <!-- Verified from: platform/windows/plain_rtf/gui/menus/file.py [build_file_menu]; platform/windows/plain_rtf/gui/menus/format.py [build_format_menu]; platform/windows/plain_rtf/gui/menus/help.py [build_help_menu]; platform/windows/plain_rtf/gui/views/root_window.py [_update_title, _build_status_bar, _update_char_count] -->
 
+The Android app has a Home screen and an editor screen:
+
+| Area | What it tells you or lets you do |
+| --- | --- |
+| Home screen | **Create New Document**, **Open Existing**, and the **Recovery drafts** list. The icons at the top open **Help**, **Send feedback**, and **Privacy**. |
+| Editor top bar | **Back**, the document name, which you can tap to change, **Save**, and **More options** with **Save As…**, **Help**, and **Send feedback**. |
+| Status line, left | Reports actions, such as **Unsaved changes** or **Saved notes**. |
+| Status line, right | Counts document characters. |
+| Format toolbar | Sits below the status line and scrolls sideways: **Undo**, **Redo**, **Bold**, **Italic**, **Underline**, **Strikethrough**, **Font**, **Font size**, **Text color**, **Background color**, **Bullet list**, **Numbered list**, **Insert tab**, **Insert table**, and **Insert image**. |
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen, DocumentTitleField, OverflowMenu, EditorStatusBar]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FormatToolbar]; platform/android/app/src/main/res/values/strings.xml -->
+
+In the task steps below, menu paths such as **Format > Bold** are the Windows
+route. On Android, use the toolbar button or top-bar command named in each
+task.
+
 ## Everyday Tasks
 
 ### Create and edit a note
@@ -88,10 +153,15 @@ use the vertical scrollbar to move through a longer document.
 1. Select existing text to replace it by typing, or remove it with **Delete**.
 1. Save the note with **File > Save**.
 
-The title begins with `*` after an edit. Starting a new document replaces the
-current document and clears its undo history. **Cancel** at the unsaved-changes
-prompt keeps the current document open.
+On Windows, the title begins with `*` after an edit. Starting a new document
+replaces the current document and clears its undo history. **Cancel** at the
+unsaved-changes prompt keeps the current document open.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_new_file, _build_editor, _handle_return, _handle_modified, _load_document, _prompt_for_unsaved_changes] -->
+
+On Android, tap **Create New Document** on the Home screen, and save with
+**Save** in the top bar. The new note is named **Untitled**; tap the name to
+change it. The status line reads **Unsaved changes** after an edit.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [newDocument]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [DEFAULT_DOCUMENT_NAME, rename]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [DocumentTitleField, EditorStatusBar] -->
 
 ### Copy, move, or undo text
 
@@ -100,10 +170,16 @@ prompt keeps the current document open.
 1. Place the cursor at the destination and press **Ctrl+V**.
 1. To undo a text edit, press **Ctrl+Z**. To redo it, press **Ctrl+Y**.
 
-Text undo history lasts for the current document session and is cleared when
-you create or open a document. To reverse a formatting change, use the
-corresponding **Format** command; text undo does not reverse those changes.
+Undo history lasts for the current document session and is cleared when you
+create or open a document. On Windows, undo covers text edits only; to reverse
+a formatting change, use the corresponding **Format** command.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_build_editor, _load_document, _handle_paste]; platform/windows/plain_rtf/gui/views/text_buffer.py [_apply_style] -->
+
+On Android, use the menu that appears when you select text to cut, copy, and
+paste, and the **Undo** and **Redo** toolbar buttons. Undo there also reverses
+formatting changes. With a hardware keyboard, **Ctrl+Z** and **Ctrl+Y** work
+as well.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [onTextContextMenuItem, onKeyShortcut]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorController.kt [command, undo, redo]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FormatToolbar] -->
 
 ### Open a saved document
 
@@ -119,6 +195,11 @@ dialog also leaves the current document in place. A successful open replaces
 the text and clears the previous document's undo history.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_open_file, _open_path, _load_document]; platform/windows/plain_rtf/adapters/files.py [read_rtf] -->
 
+On Android, tap **Open Existing** on the Home screen and choose the file in
+Android's file picker. To open another document while one is open, tap
+**Back** first. A file that cannot be opened shows **Open failed**.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [open, openDocument, runBusy]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/adapters/DocumentFiles.kt [readText] -->
+
 ### Save your changes
 
 1. Choose **File > Save**, or press **Ctrl+S**.
@@ -126,10 +207,34 @@ the text and clears the previous document's undo history.
    The default extension is `.rtf`.
 1. Complete the dialog and check for **Saved filename** in the status bar.
 
-Saving an existing document writes over its current file. A successful save
-removes the leading `*` from the title. Changes are saved when you request a
-save; there is no automatic document saving or recovery copy.
+Saving an existing document writes over its current file. On Windows, a
+successful save removes the leading `*` from the title. The document's file
+changes only when you request a save. On Windows there is no automatic saving
+or recovery copy.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _save_document_as, _set_saved_state]; platform/windows/plain_rtf/adapters/files.py [write_rtf] -->
+
+On Android, tap **Save** in the top bar. For a new document, or after you
+change the name in the top bar, Android's file picker asks where to save. The
+status line then reads **Saved** and the document name. Unsaved changes are
+also kept in a recovery draft on the device; see
+[Recover unsaved changes on Android](#recover-unsaved-changes-on-android).
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [save, write]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/PlainRtfApp.kt [PlainRtfApp]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [scheduleDraftWrite, persistDraft]; platform/android/app/src/main/res/values/strings.xml [status_saved, help_recovery_body] -->
+
+### Recover unsaved changes on Android
+
+While you edit, the Android app keeps your unsaved changes in a recovery draft
+on the device. The draft is removed once you save or discard the changes.
+
+1. Open the Home screen and find the document under **Recovery drafts**.
+1. Tap **Recover** beside its name.
+1. Review the document, then tap **Save**.
+
+A recovered document counts as unsaved until you save it. If its original file
+can no longer be written, **Save** asks where to save. To remove a draft
+without opening it, tap the delete icon beside it and choose **Delete** in
+**Delete this draft?**. That removes the unsaved changes for good, but not a
+file you saved earlier.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen, DraftRow]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [recover, recoverDraft, deleteDraft]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [recovered, persistDraft, discardDraft]; platform/android/app/src/main/res/values/strings.xml [recovery_drafts, action_recover, delete_draft_title, delete_draft_message, help_recovery_body] -->
 
 ### Save under a different name or folder
 
@@ -143,6 +248,10 @@ contents. Canceling makes no change; if saving fails, the previous document
 path remains active.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document_as, _save_document]; platform/windows/plain_rtf/adapters/files.py [write_rtf] -->
 
+On Android, tap **More options**, then **Save As…**, and choose the
+destination in Android's file picker.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [save, onSaveLocationChosen] -->
+
 ### Apply or remove inline formatting
 
 1. Select the text you want to change.
@@ -152,35 +261,49 @@ path remains active.
 
 If all selected text already has that style, the command removes it.
 Otherwise, it applies the style to the entire selection. Other formatting
-remains in place. With no text selected, the status reads
+remains in place. On Windows, with no text selected, the status reads
 **Select text to format it**, and the command makes no change.
 <!-- Verified from: platform/windows/plain_rtf/gui/menus/format.py [build_format_menu]; platform/windows/plain_rtf/gui/views/root_window.py [_toggle_style, _bind_shortcuts]; platform/windows/plain_rtf/gui/views/text_buffer.py [toggle_selection_style] -->
+
+On Android, tap the **Bold**, **Italic**, **Underline**, or **Strikethrough**
+toolbar button. With nothing selected, the formatting applies to what you type
+next.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FormatToolbar]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [toggleSelection, transformSelection]; platform/android/app/src/main/res/values/strings.xml [help_editing_body] -->
 
 ### Change the font, size, or colors
 
 1. Select the text to change.
-1. Choose the appropriate **Format** submenu and then a value:
+1. Choose the appropriate **Format** submenu on Windows, or the toolbar button
+   with the same name on Android, and then a value:
 
-   | Submenu | Available choices |
-   | --- | --- |
-   | **Font** | **Automatic**, followed by the font families available on your computer. |
-   | **Font Size** | **Automatic**, **10 pt**, **11 pt**, **12 pt**, **14 pt**, **18 pt**. |
-   | **Text Color** | **Automatic**, **Black**, **Red**, **Green**, **Blue**. |
-   | **Background Color** | **Automatic**, **Yellow**, **Green**, **Blue**. |
+   | Submenu or button | Choices on Windows | Choices on Android |
+   | --- | --- | --- |
+   | **Font** | **Automatic**, followed by the font families available on your computer. | **Automatic**, **Sans serif (Arial)**, **Serif (Times New Roman)**, **Monospace (Courier New)**. |
+   | **Font Size** | **Automatic**, **10 pt**, **11 pt**, **12 pt**, **14 pt**, **18 pt**. | The same, plus **24 pt** and **36 pt**. |
+   | **Text Color** | **Automatic**, **Black**, **Red**, **Green**, **Blue**. | The same. |
+   | **Background Color** | **Automatic**, **Yellow**, **Green**, **Blue**. | The same. |
 
 1. Review the selection. To reset that particular attribute, choose
    **Automatic** in the same submenu.
 
-Automatic font and size are Segoe UI and 11 pt. Automatic colors remove the
-explicit color or highlight and use the editor's defaults. These commands
-affect selected text immediately and preserve its other formatting. They do
-not set a formatting preference for future typing with no selection.
-<!-- Verified from: platform/windows/plain_rtf/gui/menus/format.py [build_format_menu]; platform/windows/plain_rtf/gui/views/root_window.py [_set_font_family, _set_font_size, _set_text_color, _set_background_color]; platform/windows/plain_rtf/gui/views/text_buffer.py [apply_selection_font_family, apply_selection_font_size, _apply_selection_color_component]; platform/windows/plain_rtf/domains/documents/models.py [DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE] -->
+On Windows, automatic font and size are Segoe UI and 11 pt. Automatic colors
+remove the explicit color or highlight and use the editor's defaults. These
+commands affect selected text immediately and preserve its other formatting.
+On Windows, they do not set a formatting preference for future typing with no
+selection. On Android, with nothing selected, the choice applies to what you
+type next.
+<!-- Verified from: platform/windows/plain_rtf/gui/menus/format.py [build_format_menu]; platform/windows/plain_rtf/gui/views/root_window.py [_set_font_family, _set_font_size, _set_text_color, _set_background_color]; platform/windows/plain_rtf/gui/views/text_buffer.py [apply_selection_font_family, apply_selection_font_size, _apply_selection_color_component]; platform/windows/plain_rtf/domains/documents/models.py [DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FONT_CHOICES, FONT_SIZES, TEXT_COLORS, BACKGROUND_COLORS]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [transformSelection]; platform/android/app/src/main/res/values/strings.xml [font_sans, font_serif, font_mono] -->
+
+Android does not have the fonts of a Windows computer. A document that names
+another font is shown there in a system font, and the saved font name does not
+change.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/TextAppearance.kt [genericFamily]; platform/android/app/src/main/res/values/strings.xml [help_editing_body] -->
 
 ### Create, continue, or remove a list
 
 1. Put the cursor on a line, or select several lines.
-1. Choose **Format > Bullet List** or **Format > Numbered List**.
+1. Choose **Format > Bullet List** or **Format > Numbered List**. On Android,
+   tap the **Bullet list** or **Numbered list** toolbar button.
 1. Type an item, then press **Enter** at its end to continue the list.
 1. Press **Enter** on an empty list item to remove that marker and end the list.
 
@@ -188,7 +311,7 @@ Applying a list replaces existing bullet or number markers on the affected
 lines. Newly applied numbering begins at `1.`. If every affected line already
 uses the chosen kind of list, selecting that command removes its markers.
 Selecting through the start of the next line excludes that next line.
-<!-- Verified from: platform/windows/plain_rtf/gui/views/text_buffer.py [_get_affected_lines, toggle_bullet_list, toggle_numbered_list, handle_return_in_list]; platform/windows/plain_rtf/gui/views/root_window.py [_toggle_bullet_list, _toggle_numbered_list, _handle_return] -->
+<!-- Verified from: platform/windows/plain_rtf/gui/views/text_buffer.py [_get_affected_lines, toggle_bullet_list, toggle_numbered_list, handle_return_in_list]; platform/windows/plain_rtf/gui/views/root_window.py [_toggle_bullet_list, _toggle_numbered_list, _handle_return]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/editing/TextCommands.kt [affectedLines, toggleBulletList, toggleNumberedList, continueListAfterNewline]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FormatToolbar] -->
 
 Lists are ordinary text prefixes. Automatic continuation recognizes `•`, `·`,
 `-`, or `*`, or a number followed by `.` or `)`, followed by a space or tab at
@@ -199,7 +322,8 @@ one. Renumbering later lines after edits is not automatic.
 ### Insert and edit a simple table
 
 1. Put the cursor where the table should begin.
-1. Choose **Format > Insert Table**.
+1. Choose **Format > Insert Table**. On Android, tap the **Insert table**
+   toolbar button.
 1. Replace **Column 1**, **Column 2**, and the two **Cell** placeholders.
 1. Keep tabs between columns and line breaks between rows. Add or remove text
    as you would elsewhere in the document.
@@ -207,7 +331,13 @@ one. Renumbering later lines after edits is not automatic.
 The command inserts a two-column, two-row text template. If the cursor is
 mid-line, the table starts on a new line. The cursor moves to the first header.
 This is tab-separated text, with no separate cell or table-properties dialog.
-<!-- Verified from: platform/windows/plain_rtf/gui/menus/format.py [build_format_menu]; platform/windows/plain_rtf/gui/views/text_buffer.py [insert_table] -->
+<!-- Verified from: platform/windows/plain_rtf/gui/menus/format.py [build_format_menu]; platform/windows/plain_rtf/gui/views/text_buffer.py [insert_table]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/editing/TextCommands.kt [TABLE_TEMPLATE, insertTable] -->
+
+On Android, the **Insert tab** toolbar button adds a tab, since phone
+keyboards have no Tab key. Two or more lines in a row that contain tabs are
+shown there as a table with a grid around the cells. The grid and column
+widths come from the editor and are not saved in the file.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [insertTab, drawTableGrids]; platform/android/app/src/main/res/values/strings.xml [format_tab, help_editing_body] -->
 
 ### Insert an image from a file
 
@@ -224,6 +354,12 @@ readable formats are converted to PNG for storage. Images are embedded in the
 document, so reopening it does not require the original image file.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [IMAGE_FILE_TYPES, _insert_image]; platform/windows/plain_rtf/gui/views/images.py [insert_image_at, insert_image_bytes_at_cursor]; platform/windows/plain_rtf/domains/documents/images.py [decode_image]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [_format_image] -->
 
+On Android, tap the **Insert image** toolbar button and pick one image in
+Android's photo picker. The status line reads **Inserted image**. Other image
+formats are converted to PNG or JPEG, and large photos are scaled down to keep
+the file small.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [insertImages]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/adapters/EmbeddedImages.kt [ImageImporter.fromBytes, MAX_PHOTO_EDGE_PX]; platform/android/app/src/main/res/values/strings.xml [format_image, status_inserted_image, help_editing_body] -->
+
 ### Paste an image or text
 
 1. Copy text, a bitmap image, or image files to the Windows clipboard.
@@ -234,6 +370,11 @@ A clipboard bitmap is inserted as PNG. When the clipboard contains file paths,
 the first readable image is inserted. A successful image paste reports
 **Pasted image**. If no usable image is available, ordinary text paste is used.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_build_editor, _handle_paste]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes] -->
+
+On Android, paste from the menu that appears when you tap or select in the
+text area. A pasted image is inserted in the document, and pasted text arrives
+as plain text without its original formatting.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [receiveContent, onTextContextMenuItem] -->
 
 ### Drop image files into a note
 
@@ -246,6 +387,10 @@ files are skipped. If none can be inserted, the status reads
 **Dropped file is not a supported image**. Use **File > Open...** to open a
 document; dropping files is an image insertion action.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_register_drop_target, _handle_drop]; platform/windows/plain_rtf/gui/views/images.py [insert_image_bytes_at_cursor] -->
+
+On Android, an image dragged into the text area from another app is inserted
+in the same way as a pasted image.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [receiveContent]; platform/android/app/src/main/res/values/strings.xml [help_editing_body] -->
 
 ### Remove an embedded image
 
@@ -266,6 +411,34 @@ in the text area are included when saving.
    description.
 1. Dismiss the dialog to resume editing.
 <!-- Verified from: platform/windows/plain_rtf/gui/menus/help.py [build_help_menu, show_keyboard_shortcuts, show_rtf_support, show_about] -->
+
+On Android, tap the **Help** icon on the Home screen, or **More options** and
+then **Help** in the editor. One screen holds **About Plain RTF**,
+**Document format**, **Editing**, **Saving and recovery**, **Feedback**, and
+**Keyboard shortcuts**. Tap **Back** to return. The **Privacy** icon on the
+Home screen shows the app's privacy policy, and its
+**Contact Plain Text Office** button opens the contact page on our website.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [HELP_SECTIONS, HelpScreen, PrivacyScreen, CONTACT_URL]; platform/android/app/src/main/res/values/strings.xml -->
+
+### Send feedback
+
+On Android, you can report a bug or request a feature from inside the app:
+
+1. Tap the **Send feedback** icon on the Home screen, or **More options** and
+   then **Send feedback** in the editor.
+1. Tap **Report a bug** or **Request a feature**.
+1. Your email app opens with a message to `support@plaintxtoffice.com` that
+   includes the app version, your Android version, and your device model.
+   Review or change it, then send it.
+
+The app sends nothing itself; the message goes only if you send it. If no
+email app is set up, the screen shows the address so that you can write from
+another device.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/Feedback.kt [FEEDBACK_ADDRESS, draftFeedbackEmail, openFeedbackEmail]; platform/android/app/src/main/res/values/strings.xml [feedback_body, feedback_report_bug, feedback_request_feature, feedback_no_email_app] -->
+
+The Windows program has no feedback command. Use the
+[contact form](https://plaintxtoffice.com/contact/) instead.
+<!-- Verified from: platform/windows/plain_rtf/gui/menus/menu.py [build_menu_bar]; platform/windows/plain_rtf/gui/menus/help.py [build_help_menu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [CONTACT_URL] -->
 
 ## Settings and Preferences
 
@@ -300,17 +473,16 @@ layout and a complete text example, see [Your Data Files](#your-data-files).
 
 ## Commands and Shortcuts
 
-### Launch from a terminal
+### Launch from a Windows terminal
 
-Run the module command from the `platform/windows/` folder.
+Run the command from the folder that holds `plain-rtf.exe`.
 
 | Command or argument | Accepted values | What it does |
 | --- | --- | --- |
-| `.venv/Scripts/python.exe -m plain_rtf.main` | Optional document path. | Opens the desktop editor. |
-| `plain-rtf` | Optional document path. | Installed equivalent of the module command. |
+| `./plain-rtf.exe` | Optional document path. | Opens the desktop editor. |
 | First argument | An existing Plain Text RTF file path; quote spaces. | Opens that document at startup. |
 | Additional arguments | Ignored. | No additional action. |
-<!-- Verified from: platform/windows/pyproject.toml [project.gui-scripts]; platform/windows/plain_rtf/main.py [_get_startup_path, main] -->
+<!-- Verified from: platform/windows/pyproject.toml [executable-name]; platform/windows/plain_rtf/main.py [_get_startup_path, main] -->
 
 No named command-line options are defined. For example, `--help` would be
 treated as a filename; use the **Help** menu for assistance.
@@ -355,6 +527,24 @@ break. On an empty list item it removes the marker. **Ctrl+V** uses the image
 or text paste behavior described above.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_build_editor, _handle_return, _handle_paste]; platform/windows/plain_rtf/gui/views/text_buffer.py [handle_return_in_list] -->
 
+### Use Android buttons and keys
+
+The Android commands are the top-bar and toolbar buttons listed in
+[Getting Around](#getting-around). With a hardware keyboard, these keys also
+work in the editor:
+
+| Shortcut | Action |
+| --- | --- |
+| **Tab** | Insert a tab. |
+| **Ctrl+S** | Save. |
+| **Ctrl+Shift+S** | Save As. |
+| **Ctrl+B** | Toggle bold. |
+| **Ctrl+I** | Toggle italics. |
+| **Ctrl+U** | Toggle underlining. |
+| **Ctrl+Z** | Undo. |
+| **Ctrl+Y** or **Ctrl+Shift+Z** | Redo. |
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [onKeyDown, onKeyShortcut]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorController.kt [onShortcut]; platform/android/app/src/main/res/values/strings.xml [help_shortcuts_body] -->
+
 ## Your Data Files
 
 ### Locate documents and diagnostic logs
@@ -363,17 +553,25 @@ or text paste behavior described above.
 | --- | --- | --- |
 | Your `.rtf` documents | The folder you choose when saving. | Stores text, formatting, and embedded images. May be edited as UTF-8 text using the rules below. |
 | Original image files | Wherever you selected them. | Read when inserted; the document stores its own image content. |
-| `logs/rtf-editor.log` | Under `platform/windows/` when running from source; under `plain-rtf-data/` beside a portable executable; under `%LOCALAPPDATA%/plain-rtf/` for an installed application. | Diagnostic output. Read it when investigating problems; it is not a document or preferences file. |
+| `logs/rtf-editor.log` | Windows only: under `plain-rtf-data/` beside a portable executable; under `%LOCALAPPDATA%/plain-rtf/` for an installed application. | Diagnostic output. Read it when investigating problems; it is not a document or preferences file. |
 | `logs/rtf-editor.1.log` through `logs/rtf-editor.3.log` | Beside the main log. | Older diagnostic output retained as the log rotates at approximately 1,000,000 bytes. |
-<!-- Verified from: platform/windows/plain_rtf/adapters/files.py [read_rtf, write_rtf]; platform/windows/plain_rtf/gui/views/root_window.py [_save_document_as]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [_format_image]; platform/windows/plain_rtf/gui/app.py [launch_app]; platform/windows/plain_rtf/config/path_handler.py [LOGS_DIR, APP_ROOT]; platform/windows/plain_rtf/config/logging/log_config.py [configure_logging, _rotating_handler_factory] -->
+| Recovery drafts | Android only: the app's own storage on the device. | Hold unsaved changes until you save or discard them. Manage them from the Home screen, not by hand. |
+<!-- Verified from: platform/windows/plain_rtf/adapters/files.py [read_rtf, write_rtf]; platform/windows/plain_rtf/gui/views/root_window.py [_save_document_as]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [_format_image]; platform/windows/plain_rtf/gui/app.py [launch_app]; platform/windows/plain_rtf/config/path_handler.py [LOGS_DIR, APP_ROOT]; platform/windows/plain_rtf/config/logging/log_config.py [configure_logging, _rotating_handler_factory]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [Factory]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DraftStore.kt -->
 
-The portable executable needs a writable folder. Its application data stays
-beside it and is not redirected to AppData if that folder cannot be written.
-If **Cannot write application data** appears, move the executable to a writable
-folder and try again. Your documents still use the paths you select when saving.
-The portable data folder follows the executable's name: `My Notes.exe` uses
-`My Notes-data/`. Rename its existing data folder too if you want to retain
-the logs when renaming the executable.
+On Android, you choose where each document is saved in Android's file picker.
+A file stored with a provider such as Google Drive or Dropbox may be uploaded
+or synchronized by that provider. Recovery drafts are left out of Android
+device backups and transfers, and uninstalling the app removes them. Documents
+you saved are separate and stay where they are.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/PlainRtfApp.kt [PlainRtfApp]; platform/android/app/src/main/AndroidManifest.xml [allowBackup]; platform/android/app/src/main/res/xml/backup_rules.xml; platform/android/app/src/main/res/xml/data_extraction_rules.xml; platform/android/app/src/main/res/values/strings.xml [privacy_saving_body, privacy_removing_body] -->
+
+The Windows portable executable needs a writable folder. Its application data
+stays beside it and is not redirected to AppData if that folder cannot be
+written. If **Cannot write application data** appears, move the executable to a
+writable folder and try again. Your documents still use the paths you select
+when saving. The portable data folder follows the executable's name:
+`My Notes.exe` uses `My Notes-data/`. Rename its existing data folder too if you
+want to retain the logs when renaming the executable.
 <!-- Verified from: platform/windows/plain_rtf/config/path_handler.py [STORAGE_MODE, ROOT_DIR]; platform/windows/plain_rtf/gui/app.py [_show_storage_error]; platform/windows/plain_rtf/gui/views/root_window.py [_save_document_as] -->
 
 Use **Save As...** to change a document's storage location. Save or close the
@@ -464,11 +662,12 @@ bytes are contained in the file, not referenced by a separate filename.
 | Pasting copied files inserts only one image. | Clipboard file paste selects the first readable image. | Drop multiple files onto the editor to insert several images. |
 | A list keeps adding markers when you press **Enter**. | The current line is a recognized list item. | Press **Enter** on an empty list item, or toggle the matching list command to remove markers. |
 | A wide image appears smaller. | Image display is reduced to fit the text area. | This is expected; PNG and JPEG source bytes are preserved in the document. |
-<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _set_font_family, _set_font_size, _set_text_color, _set_background_color, _toggle_style, _insert_image, _handle_drop]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes, insert_image_at]; platform/windows/plain_rtf/gui/views/text_buffer.py [handle_return_in_list]; platform/windows/plain_rtf/domains/documents/images.py [decode_image] -->
+| On Android, **Send feedback** reports that no email app is set up on this device. | Feedback is sent through your own email app. | Write to the address shown from any other device. |
+<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _set_font_family, _set_font_size, _set_text_color, _set_background_color, _toggle_style, _insert_image, _handle_drop]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes, insert_image_at]; platform/windows/plain_rtf/gui/views/text_buffer.py [handle_return_in_list]; platform/windows/plain_rtf/domains/documents/images.py [decode_image]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/res/values/strings.xml [feedback_no_email_app] -->
 
-For file errors, use the dialog's message first. The diagnostic log location
-is listed above, but open/save errors are shown in dialogs and are not
-explicitly written to that log.
+For file errors, use the dialog's message first. The Windows diagnostic log
+location is listed above, but open/save errors are shown in dialogs and are
+not explicitly written to that log.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_open_path, _save_document]; platform/windows/plain_rtf/config/logging/log_config.py [configure_logging] -->
 
 ## FAQ
@@ -481,9 +680,15 @@ markers. The `.rtf` extension alone does not establish compatibility.
 
 ### Does the editor save automatically?
 
-No. Use **Save** or **Save As...**. New, Open, and Exit prompt when there are
-unsaved changes; **Cancel** lets you return to the current document.
+Not to the document's file. Use **Save** or **Save As...**. On Windows, New,
+Open, and Exit prompt when there are unsaved changes; **Cancel** lets you
+return to the current document. There is no recovery copy on Windows.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _new_file, _open_file, _on_close, _prompt_for_unsaved_changes] -->
+
+On Android, unsaved changes are also kept in a recovery draft on the device
+until you save or discard them, and the Home screen lists the drafts you can
+recover or delete.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [scheduleDraftWrite, persistDraft]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/res/values/strings.xml [help_recovery_body] -->
 
 ### Do I need to send image files with my document?
 
@@ -520,5 +725,6 @@ edit their text directly, and list commands help add or remove the prefixes.
 | Inline formatting | Font, size, colors, bold, italic, underline, or strikethrough applied to text. |
 | Embedded image | Image content stored inside the document file. |
 | Marker | A `[[...]]` instruction in the native file that describes styling or an image. |
-| Unsaved changes | Edits not yet written to the document's file, indicated by a leading `*` in the title. |
-<!-- Verified from: platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [FORMAT_HEADER, _format_styled_text, _format_image]; platform/windows/plain_rtf/gui/views/text_buffer.py [_look_selection_range]; platform/windows/plain_rtf/gui/views/images.py [insert_image_bytes_at_cursor]; platform/windows/plain_rtf/gui/views/root_window.py [_update_title] -->
+| Unsaved changes | Edits not yet written to the document's file, indicated by a leading `*` in the title on Windows and by **Unsaved changes** in the status line on Android. |
+| Recovery draft | The Android app's copy of a document's unsaved changes, kept on the device until you save or discard them. |
+<!-- Verified from: platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [FORMAT_HEADER, _format_styled_text, _format_image]; platform/windows/plain_rtf/gui/views/text_buffer.py [_look_selection_range]; platform/windows/plain_rtf/gui/views/images.py [insert_image_bytes_at_cursor]; platform/windows/plain_rtf/gui/views/root_window.py [_update_title]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorStatusBar]; platform/android/app/src/main/res/values/strings.xml [help_recovery_body] -->

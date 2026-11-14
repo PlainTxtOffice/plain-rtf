@@ -1,4 +1,4 @@
-<!-- last_updated: 2026-11-09 -->
+<!-- last_updated: 2026-11-13 -->
 <!-- Authoring guidance: dev-docs/specs/README_SPEC.instructions.md -->
 <!-- rumdl-disable MD033 MD041 -->
 <p align="center">
@@ -44,7 +44,8 @@ full syntax.
 - Font families, font sizes, text colors, and background highlighting.
 - Bulleted and numbered lists, plus simple text tables.
 - Embedded PNG and JPEG images, including image paste on Windows.
-- File drag-and-drop and familiar keyboard shortcuts.
+- Drag image files into a note to insert them, and use familiar keyboard
+  shortcuts.
 
 ## App Screenshot
 
@@ -59,14 +60,21 @@ size.*
 | --- | --- | --- |
 | Windows (portable) | [plain-rtf.exe](https://github.com/PlainTxtOffice/plain-rtf/releases/latest/download/plain-rtf.exe) | Runs without installation. |
 | Windows (installer) | [plain-rtf-setup.exe](https://github.com/PlainTxtOffice/plain-rtf/releases/latest/download/plain-rtf-setup.exe) | |
-| Android | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) | |
+| Android | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) | Requires Android 9 or later. |
 
 The Windows builds are for x64 (64-bit) and do not need Python installed.
 
 ## User Manual
 
-See the [User Manual](docs/USER_MANUAL.md) for setup, usage, keyboard
+See the [User Manual](docs/USER_MANUAL.md) for installation, usage, keyboard
 shortcuts, file-format details, and troubleshooting.
+
+## Feedback
+
+Bug reports and feature requests are welcome. In the Android app, tap
+**Send feedback** on the Home screen or in the editor's menu. The Windows app
+has no feedback command; use the
+[contact form](https://plaintxtoffice.com/contact/) on plaintxtoffice.com.
 
 ## License
 
