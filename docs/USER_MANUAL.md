@@ -1,6 +1,6 @@
 ---
 last_updated: 2026-11-22
-version: 3.1.2
+version: 6.0.0
 product_versions:
   windows: "0.1.0"
   ios: "1.0.1"
@@ -30,7 +30,7 @@ They are not Microsoft RTF documents and cannot be exchanged as Microsoft RTF.
 
 | Platform | Requirements | Where to get it |
 | --- | --- | --- |
-| Windows | An x64 (64-bit) PC. The minimum Windows version is Unknown. | [Latest release](https://github.com/PlainTxtOffice/plain-rtf/releases/latest) |
+| Windows | An x64 (64-bit) PC. | [Latest release](https://github.com/PlainTxtOffice/plain-rtf/releases/latest) |
 | Android | Android 9 or later. | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) |
 | iOS | An iPhone with iOS 26.4 or later. | [App Store](https://apps.apple.com/app/id6837573461) |
 <!-- Verified from: README.md [Download]; platform/windows/scripts/advanced_installer/build_installer.ps1 [Read-ExeArchitecture]; platform/android/app/build.gradle.kts [applicationId, minSdk]; platform/ios/plain_rtf.xcodeproj/project.pbxproj [IPHONEOS_DEPLOYMENT_TARGET, TARGETED_DEVICE_FAMILY]; dev-docs/store_listings/app-store.md [Status] -->
@@ -541,40 +541,6 @@ screen shows the app's privacy policy, and its **Contact Plain Text Office**
 link opens the contact page on our website.
 <!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/PrivacyPolicyView.swift [PrivacyPolicyButton, PrivacyPolicyView] -->
 
-### Send feedback
-
-Send bug reports and feature requests to
-[support@plaintxtoffice.com](mailto:support@plaintxtoffice.com) or through the
-[contact page](https://plaintxtoffice.com/contact/) from any device. The
-Android and iOS apps also have a feedback screen.
-
-On Android, you can report a bug or request a feature from inside the app:
-
-1. Tap the **Send feedback** icon on the Home screen, or **More options** and
-   then **Send feedback** in the editor.
-1. Tap **Report a bug** or **Request a feature**.
-1. Your email app opens with a message to `support@plaintxtoffice.com` that
-   includes the app version, your Android version, and your device model.
-   Review or change it, then send it.
-
-The app sends nothing itself; the message goes only if you send it. If no
-email app is set up, the screen shows the address so that you can write from
-another device.
-<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/Feedback.kt [FEEDBACK_ADDRESS, draftFeedbackEmail, openFeedbackEmail]; platform/android/app/src/main/res/values/strings.xml [feedback_body, feedback_report_bug, feedback_request_feature, feedback_no_email_app] -->
-
-On iOS, tap **Send Feedback** at the top of the Home screen. **Report a bug**
-and **Request a feature** open a message to `support@plaintxtoffice.com` in
-your email app, with the app version, your iOS version, and your device model
-filled in; your documents are not included. **Open contact form** opens the
-contact page in your browser instead. If no email app is set up, the screen
-says so and suggests **Open contact form**. Tap **Done** to close it.
-<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/Feedback.swift [Feedback, FeedbackView] -->
-
-The Windows program has no feedback command. Write to
-`support@plaintxtoffice.com` or use the
-[contact form](https://plaintxtoffice.com/contact/) instead.
-<!-- Verified from: platform/windows/plain_rtf/gui/menus/menu.py [build_menu_bar]; platform/windows/plain_rtf/gui/menus/help.py [build_help_menu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [CONTACT_URL] -->
-
 ## Settings and Preferences
 
 Not Applicable.
@@ -884,6 +850,59 @@ switches on its own instead.
 No. Tables use tabs and line breaks; lists use visible text prefixes. You can
 edit their text directly, and list commands help add or remove the prefixes.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/text_buffer.py [insert_table, toggle_bullet_list, toggle_numbered_list] -->
+
+## Feedback
+
+Send bug reports and feature requests to
+[support@plaintxtoffice.com](mailto:support@plaintxtoffice.com) or through the
+[contact page](https://plaintxtoffice.com/contact/) from any device. The
+Android and iOS apps also have a feedback screen.
+
+| Platform | How to open feedback |
+| --- | --- |
+| Windows | Version 0.1.0 has no feedback command. **Help > Send Feedback...** is in development for the next Windows release. |
+| Android | Tap the **Send feedback** icon on the Home screen, or **More options** and then **Send feedback** in the editor. |
+| iOS | Tap **Send Feedback** at the top of the Home screen. |
+<!-- Verified from: https://github.com/PlainTxtOffice/plain-rtf/releases [v0.1.0, 2026-11-10]; platform/windows/plain_rtf/gui/menus/help.py [build_help_menu]; platform/windows/plain_rtf/gui/feedback.py; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/ios/plain_rtf/HomeView.swift [HomeView] -->
+
+### Send feedback on Windows (in development)
+
+The Windows release available now, version 0.1.0, has no feedback command;
+write to `support@plaintxtoffice.com` or use the
+[contact form](https://plaintxtoffice.com/contact/). The next Windows release
+adds a feedback dialog:
+
+1. Choose **Help > Send Feedback...**.
+1. Click **Report a Bug** or **Request a Feature**. Your email app opens a
+   message to `support@plaintxtoffice.com` with the app version and your
+   Windows version filled in; your documents are not included.
+1. Review or change it, then send it. Nothing is sent unless you send it.
+1. To use the website instead, click **Open Contact Form**.
+<!-- Verified from: https://github.com/PlainTxtOffice/plain-rtf/releases [v0.1.0]; platform/windows/plain_rtf/gui/menus/help.py [build_help_menu]; platform/windows/plain_rtf/gui/feedback.py -->
+
+### Send feedback on Android
+
+1. Tap the **Send feedback** icon on the Home screen, or **More options** and
+   then **Send feedback** in the editor.
+1. Tap **Report a bug** or **Request a feature**.
+1. Your email app opens a draft email to Plain Text Office that includes the
+   app version, your Android version, and your device model. Review or change
+   it, then send it.
+
+The app sends nothing itself; the message goes only if you send it. If no
+email app is set up, the screen shows the address so that you can write from
+another device.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/Feedback.kt [FEEDBACK_ADDRESS, draftFeedbackEmail, openFeedbackEmail]; platform/android/app/src/main/res/values/strings.xml [feedback_body, feedback_report_bug, feedback_request_feature, feedback_no_email_app] -->
+
+### Send feedback on iOS
+
+Tap **Send Feedback** at the top of the Home screen. **Report a bug** and
+**Request a feature** open a message to `support@plaintxtoffice.com` in
+your email app, with the app version, your iOS version, and your device model
+filled in; your documents are not included. **Open contact form** opens the
+contact page in your browser instead. If no email app is set up, the screen
+says so and suggests **Open contact form**. Tap **Done** to close it.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/Feedback.swift [Feedback, FeedbackView] -->
 
 ## Glossary
 
