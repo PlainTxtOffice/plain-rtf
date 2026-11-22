@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-11-21
-version: 3.1.1
+last_updated: 2026-11-22
+version: 3.1.2
 product_versions:
   windows: "0.1.0"
   ios: "1.0.1"
@@ -542,6 +542,11 @@ link opens the contact page on our website.
 
 ### Send feedback
 
+Send bug reports and feature requests to
+[support@plaintxtoffice.com](mailto:support@plaintxtoffice.com) or through the
+[contact page](https://plaintxtoffice.com/contact/) from any device. The
+Android and iOS apps also have a feedback screen.
+
 On Android, you can report a bug or request a feature from inside the app:
 
 1. Tap the **Send feedback** icon on the Home screen, or **More options** and
@@ -564,7 +569,8 @@ contact page in your browser instead. If no email app is set up, the screen
 says so and suggests **Open contact form**. Tap **Done** to close it.
 <!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/Feedback.swift [Feedback, FeedbackView] -->
 
-The Windows program has no feedback command. Use the
+The Windows program has no feedback command. Write to
+`support@plaintxtoffice.com` or use the
 [contact form](https://plaintxtoffice.com/contact/) instead.
 <!-- Verified from: platform/windows/plain_rtf/gui/menus/menu.py [build_menu_bar]; platform/windows/plain_rtf/gui/menus/help.py [build_help_menu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [CONTACT_URL] -->
 
