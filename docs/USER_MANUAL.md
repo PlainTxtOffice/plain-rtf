@@ -1,9 +1,9 @@
 ---
-last_updated: 2026-11-13
+last_updated: 2026-11-21
 version: 3.1.1
 product_versions:
   windows: "0.1.0"
-  ios: "1.0"
+  ios: "1.0.1"
   android: "1.0.2"
 generated_from: "dev-docs/specs/USER_MANUAL_SPEC.instructions.md"
 ---
@@ -12,18 +12,19 @@ generated_from: "dev-docs/specs/USER_MANUAL_SPEC.instructions.md"
 
 ## Overview
 
-Plain RTF is an editor for people writing quick rich-text notes on Windows
-and Android. It supports text formatting, lists, simple tables, and embedded
-images through a graphical interface. On Windows it is a desktop program,
-named **RTF Editor** in its window, which can also be started from a terminal.
-On Android it is an app named **Plain RTF**. This manual covers installation
-and everyday use on both.
-<!-- Verified from: platform/windows/pyproject.toml [project]; platform/windows/plain_rtf/gui/menus/help.py [ABOUT_TEXT]; platform/windows/plain_rtf/main.py [main]; platform/android/app/src/main/res/values/strings.xml [app_name, help_about_body]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/PlainRtfApp.kt [PlainRtfApp] -->
+Plain RTF is an editor for people writing quick rich-text notes on Windows,
+Android, and iOS. It supports text formatting, lists, simple tables, and
+embedded images through a graphical interface. On Windows it is a desktop
+program, named **RTF Editor** in its window, which can also be started from a
+terminal. On Android and iPhone it is an app named **Plain RTF**. This manual
+covers installation and everyday use on all three. The iOS app offers fewer
+editing commands than the others; each task below says what it lacks.
+<!-- Verified from: platform/windows/pyproject.toml [project]; platform/windows/plain_rtf/gui/menus/help.py [ABOUT_TEXT]; platform/windows/plain_rtf/main.py [main]; platform/android/app/src/main/res/values/strings.xml [app_name, help_about_body]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/PlainRtfApp.kt [PlainRtfApp]; platform/ios/plain_rtf.xcodeproj/project.pbxproj [INFOPLIST_KEY_CFBundleDisplayName, TARGETED_DEVICE_FAMILY]; platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar] -->
 
 Documents use the application's **Plain Text RTF** format. Although filenames
 normally end in `.rtf`, these are UTF-8 text files beginning with `PTRTF/1`.
 They are not Microsoft RTF documents and cannot be exchanged as Microsoft RTF.
-<!-- Verified from: platform/windows/plain_rtf/gui/menus/help.py [RTF_SUPPORT_TEXT]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [FORMAT_HEADER, parse_plain_text_rtf] -->
+<!-- Verified from: platform/windows/plain_rtf/gui/menus/help.py [RTF_SUPPORT_TEXT]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [FORMAT_HEADER, parse_plain_text_rtf]; platform/ios/plain_rtf/PlainTextRTF.swift [header, parse] -->
 
 ## Installation and Setup
 
@@ -31,7 +32,8 @@ They are not Microsoft RTF documents and cannot be exchanged as Microsoft RTF.
 | --- | --- | --- |
 | Windows | An x64 (64-bit) PC. The minimum Windows version is Unknown. | [Latest release](https://github.com/PlainTxtOffice/plain-rtf/releases/latest) |
 | Android | Android 9 or later. | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) |
-<!-- Verified from: README.md [Download]; platform/windows/scripts/advanced_installer/build_installer.ps1 [Read-ExeArchitecture]; platform/android/app/build.gradle.kts [applicationId, minSdk] -->
+| iOS | An iPhone with iOS 26.4 or later. | [App Store](https://apps.apple.com/app/id6837573461) |
+<!-- Verified from: README.md [Download]; platform/windows/scripts/advanced_installer/build_installer.ps1 [Read-ExeArchitecture]; platform/android/app/build.gradle.kts [applicationId, minSdk]; platform/ios/plain_rtf.xcodeproj/project.pbxproj [IPHONEOS_DEPLOYMENT_TARGET, TARGETED_DEVICE_FAMILY]; dev-docs/store_listings/app-store.md [Status] -->
 
 ### Install on Windows
 
@@ -62,6 +64,15 @@ To use the portable program:
 
 The app does not request internet access.
 <!-- Verified from: README.md [Download]; platform/android/app/build.gradle.kts [applicationId]; platform/android/app/src/main/AndroidManifest.xml; platform/android/app/src/main/res/values/strings.xml [privacy_services_body] -->
+
+### Install on iOS
+
+1. On your iPhone, open
+   [Plain RTF on the App Store](https://apps.apple.com/app/id6837573461).
+1. Install the app.
+
+The app has no account, advertising, or analytics service.
+<!-- Verified from: README.md [Download]; dev-docs/store_listings/app-store.md [Status]; platform/ios/plain_rtf.xcodeproj/project.pbxproj [PRODUCT_BUNDLE_IDENTIFIER, INFOPLIST_KEY_CFBundleDisplayName]; platform/ios/plain_rtf/PrivacyPolicyView.swift [PrivacyPolicyView] -->
 
 ## Starting the Program
 
@@ -109,6 +120,21 @@ There is no quit command; leave the app as you leave any Android app. Unsaved
 changes are written to a recovery draft when the app leaves the screen.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen, CloseWarningDialog]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [closeIfSaved, keepDraftAndClose, discardAndClose, onAppStopped] -->
 
+### Start on iOS
+
+Tap the **Plain RTF** icon. The Home screen offers **Create New Document** and
+**Open Existing**, and lists each recovery draft as a **Recover:** button
+followed by the document's name. Documents cannot be opened from other apps;
+use **Open Existing**.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf.xcodeproj/project.pbxproj [GENERATE_INFOPLIST_FILE] -->
+
+To leave a document, tap **Back** at the top left. If it has unsaved changes,
+**Unsaved changes** offers **Keep Draft and Close**, **Discard Changes**, or
+**Cancel**. To save instead, choose **Cancel** and tap **Save** first. There is
+no quit command; leave the app as you leave any iPhone app. Unsaved changes are
+written to a recovery draft when the app leaves the screen.
+<!-- Verified from: platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/RTFDocument.swift [persistDraft, discardDraft] -->
+
 ## Getting Around
 
 Plain RTF holds one document at a time. Click or tap in the main text area to
@@ -139,9 +165,19 @@ The Android app has a Home screen and an editor screen:
 | Format toolbar | Sits below the status line and scrolls sideways: **Undo**, **Redo**, **Bold**, **Italic**, **Underline**, **Strikethrough**, **Font**, **Font size**, **Text color**, **Background color**, **Bullet list**, **Numbered list**, **Insert tab**, **Insert table**, and **Insert image**. |
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen, DocumentTitleField, OverflowMenu, EditorStatusBar]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FormatToolbar]; platform/android/app/src/main/res/values/strings.xml -->
 
+The iOS app also has a Home screen and an editor screen:
+
+| Area | What it tells you or lets you do |
+| --- | --- |
+| Home screen | **Create New Document**, **Open Existing**, and a **Recover:** button for each recovery draft. The buttons at the top open **Privacy** and **Send Feedback**. |
+| Editor top bar | **Back**, the document name, which you can tap to rename, and **Save** (the tray with a downward arrow). |
+| Bottom of the editor | Shows **Unsaved** while the document has unsaved changes. |
+| Format toolbar | Sits above the keyboard and scrolls sideways: **Bold**, **Italic**, **Underline**, **Font Size**, **Text Color**, and **Lists**. |
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/PrivacyPolicyView.swift [PrivacyPolicyButton]; platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/RichTextEditor.swift [makeUIView]; platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar] -->
+
 In the task steps below, menu paths such as **Format > Bold** are the Windows
-route. On Android, use the toolbar button or top-bar command named in each
-task.
+route. On Android and iOS, use the toolbar button or top-bar command named in
+each task.
 
 ## Everyday Tasks
 
@@ -163,6 +199,11 @@ On Android, tap **Create New Document** on the Home screen, and save with
 change it. The status line reads **Unsaved changes** after an edit.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [newDocument]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [DEFAULT_DOCUMENT_NAME, rename]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [DocumentTitleField, EditorStatusBar] -->
 
+On iOS, tap **Create New Document** on the Home screen, and save with **Save**
+in the top bar. The new note is named **Untitled**; tap the name at the top to
+rename it. **Unsaved** appears at the bottom of the screen after an edit.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/RTFDocument.swift [name, isDirty]; platform/ios/plain_rtf/EditorView.swift [EditorView] -->
+
 ### Copy, move, or undo text
 
 1. Select the text you want to copy or move.
@@ -180,6 +221,11 @@ paste, and the **Undo** and **Redo** toolbar buttons. Undo there also reverses
 formatting changes. With a hardware keyboard, **Ctrl+Z** and **Ctrl+Y** work
 as well.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [onTextContextMenuItem, onKeyShortcut]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorController.kt [command, undo, redo]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FormatToolbar] -->
+
+On iOS, use the menu that appears when you select text to cut, copy, and
+paste. There are no **Undo** or **Redo** buttons; the iPhone's standard undo,
+such as shaking the device, works in the text area.
+<!-- Verified from: platform/ios/plain_rtf/RichTextEditor.swift [makeUIView]; platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar] -->
 
 ### Open a saved document
 
@@ -200,6 +246,12 @@ Android's file picker. To open another document while one is open, tap
 **Back** first. A file that cannot be opened shows **Open failed**.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [open, openDocument, runBusy]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/adapters/DocumentFiles.kt [readText] -->
 
+On iOS, tap **Open Existing** on the Home screen and choose the file in the
+file browser, which lists `.rtf` files. To open another document while one is
+open, tap **Back** first. A file that cannot be opened shows **Open Failed**
+with the reason.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/RTFDocument.swift [init(fileURL:draftStore:)]; platform/ios/plain_rtf/SaveProtection.swift [RTFSerialization] -->
+
 ### Save your changes
 
 1. Choose **File > Save**, or press **Ctrl+S**.
@@ -217,24 +269,34 @@ On Android, tap **Save** in the top bar. For a new document, or after you
 change the name in the top bar, Android's file picker asks where to save. The
 status line then reads **Saved** and the document name. Unsaved changes are
 also kept in a recovery draft on the device; see
-[Recover unsaved changes on Android](#recover-unsaved-changes-on-android).
+[Recover unsaved changes](#recover-unsaved-changes).
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [save, write]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/PlainRtfApp.kt [PlainRtfApp]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [scheduleDraftWrite, persistDraft]; platform/android/app/src/main/res/values/strings.xml [status_saved, help_recovery_body] -->
 
-### Recover unsaved changes on Android
+On iOS, tap **Save** in the top bar. For a new document, or after you rename
+it, iOS asks where to save and suggests the document's name with `.rtf`.
+**Unsaved** disappears once the save succeeds; if it fails, **Save Failed**
+gives the reason. Unsaved changes are also kept in a recovery draft.
+<!-- Verified from: platform/ios/plain_rtf/EditorView.swift [EditorView, saveToExistingFile]; platform/ios/plain_rtf/RTFDocument.swift [save, markSaved, persistDraft] -->
 
-While you edit, the Android app keeps your unsaved changes in a recovery draft
-on the device. The draft is removed once you save or discard the changes.
+### Recover unsaved changes
 
-1. Open the Home screen and find the document under **Recovery drafts**.
-1. Tap **Recover** beside its name.
+While you edit, the Android and iOS apps keep your unsaved changes in a
+recovery draft on the device. The draft is removed once you save or discard
+the changes.
+
+1. Open the Home screen and find the document under **Recovery drafts**. On
+   iOS, the drafts are listed without a heading.
+1. Tap **Recover** beside its name. On iOS, tap **Recover:** followed by its
+   name.
 1. Review the document, then tap **Save**.
 
 A recovered document counts as unsaved until you save it. If its original file
-can no longer be written, **Save** asks where to save. To remove a draft
-without opening it, tap the delete icon beside it and choose **Delete** in
-**Delete this draft?**. That removes the unsaved changes for good, but not a
-file you saved earlier.
-<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen, DraftRow]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [recover, recoverDraft, deleteDraft]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [recovered, persistDraft, discardDraft]; platform/android/app/src/main/res/values/strings.xml [recovery_drafts, action_recover, delete_draft_title, delete_draft_message, help_recovery_body] -->
+can no longer be written, **Save** asks where to save. On Android, to remove a
+draft without opening it, tap the delete icon beside it and choose **Delete**
+in **Delete this draft?**. On iOS, recover the draft, tap **Back**, and choose
+**Discard Changes**. Either way, that removes the unsaved changes for good, but
+not a file you saved earlier.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen, DraftRow]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [recover, recoverDraft, deleteDraft]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [recovered, persistDraft, discardDraft]; platform/android/app/src/main/res/values/strings.xml [recovery_drafts, action_recover, delete_draft_title, delete_draft_message, help_recovery_body]; platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/RTFDocument.swift [init(recovering:draftStore:), discardDraft]; platform/ios/plain_rtf/EditorView.swift [EditorView] -->
 
 ### Save under a different name or folder
 
@@ -251,6 +313,11 @@ path remains active.
 On Android, tap **More options**, then **Save As…**, and choose the
 destination in Android's file picker.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [save, onSaveLocationChosen] -->
+
+iOS has no **Save As** command. Rename the document at the top, then tap
+**Save**; iOS asks where to save the copy, and the original file is left as it
+was.
+<!-- Verified from: platform/ios/plain_rtf/EditorView.swift [EditorView, renameFile] -->
 
 ### Apply or remove inline formatting
 
@@ -269,6 +336,13 @@ On Android, tap the **Bold**, **Italic**, **Underline**, or **Strikethrough**
 toolbar button. With nothing selected, the formatting applies to what you type
 next.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/FormatToolbar.kt [FormatToolbar]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [toggleSelection, transformSelection]; platform/android/app/src/main/res/values/strings.xml [help_editing_body] -->
+
+On iOS, tap the **Bold**, **Italic**, or **Underline** toolbar button. With
+nothing selected, the formatting applies to what you type next. Each part of a
+mixed selection switches on its own: bold text becomes regular and regular
+text becomes bold. iOS has no **Strikethrough** button, but strikethrough
+already in a document is kept when you save.
+<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [applyTrait, toggleUnderline]; platform/ios/plain_rtf/PlainTextRTFText.swift [attributes(for:), style(from:)] -->
 
 ### Change the font, size, or colors
 
@@ -299,11 +373,27 @@ another font is shown there in a system font, and the saved font name does not
 change.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/TextAppearance.kt [genericFamily]; platform/android/app/src/main/res/values/strings.xml [help_editing_body] -->
 
+On iOS, select the text and tap **Font Size** or **Text Color** on the toolbar.
+With nothing selected, the choice applies to what you type next.
+
+| Button | Choices on iOS |
+| --- | --- |
+| **Font Size** | **12 pt**, **14 pt**, **16 pt**, **18 pt**, **20 pt**, **24 pt**, **28 pt**, **32 pt**, **36 pt**, **48 pt**. |
+| **Text Color** | **Default**, **Red**, **Blue**, **Green**, **Orange**, **Purple**. |
+
+**Default** resets the text color. The automatic font and size on iOS are the
+iPhone's system font at 16 pt. iOS has no **Font** or **Background Color**
+button, but fonts and highlights already in a document are kept when you save.
+A font the iPhone does not have is shown in the system font, and its saved
+name does not change.
+<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar, applyFontSize, applyColor]; platform/ios/plain_rtf/PlainTextRTFText.swift [defaultFontSize, font(for:), style(from:)] -->
+
 ### Create, continue, or remove a list
 
 1. Put the cursor on a line, or select several lines.
 1. Choose **Format > Bullet List** or **Format > Numbered List**. On Android,
-   tap the **Bullet list** or **Numbered list** toolbar button.
+   tap the **Bullet list** or **Numbered list** toolbar button. On iOS, tap
+   **Lists**, then **Bullet List** or **Numbered List**.
 1. Type an item, then press **Enter** at its end to continue the list.
 1. Press **Enter** on an empty list item to remove that marker and end the list.
 
@@ -318,6 +408,13 @@ Lists are ordinary text prefixes. Automatic continuation recognizes `•`, `·`,
 the beginning of the line. Continuing a numbered item increases its number by
 one. Renumbering later lines after edits is not automatic.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/text_buffer.py [_BULLET_RE, _NUMBER_RE, handle_return_in_list] -->
+
+On iOS, the list commands start each line with `•` or a number and a period,
+followed by a tab, and indent the wrapped text. Pressing **Return** does not
+continue a list there, and applying a list adds its marker without replacing
+another kind. To extend a list, type the marker yourself, or select the lines
+and apply the list again. The indent is restored when you reopen the document.
+<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [toggleBulletList, toggleNumberedList, setListIndent]; platform/ios/plain_rtf/PlainTextRTFText.swift [applyListIndents] -->
 
 ### Insert and edit a simple table
 
@@ -338,6 +435,10 @@ keyboards have no Tab key. Two or more lines in a row that contain tabs are
 shown there as a table with a grid around the cells. The grid and column
 widths come from the editor and are not saved in the file.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [insertTab, drawTableGrids]; platform/android/app/src/main/res/values/strings.xml [format_tab, help_editing_body] -->
+
+iOS has no **Insert table** command. Tables in a document open and save
+unchanged there, shown as text separated by tabs.
+<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar]; platform/ios/plain_rtf/PlainTextRTF.swift [parse, format] -->
 
 ### Insert an image from a file
 
@@ -360,6 +461,11 @@ formats are converted to PNG or JPEG, and large photos are scaled down to keep
 the file small.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [insertImages]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/adapters/EmbeddedImages.kt [ImageImporter.fromBytes, MAX_PHOTO_EDGE_PX]; platform/android/app/src/main/res/values/strings.xml [format_image, status_inserted_image, help_editing_body] -->
 
+iOS has no **Insert image** command; paste an image instead, as described in
+the next task. Images in a document open there, and wide images are shown
+smaller while their saved size stays the same.
+<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar]; platform/ios/plain_rtf/PlainTextRTFText.swift [maximumImageWidth, attributedImage] -->
+
 ### Paste an image or text
 
 1. Copy text, a bitmap image, or image files to the Windows clipboard.
@@ -375,6 +481,15 @@ On Android, paste from the menu that appears when you tap or select in the
 text area. A pasted image is inserted in the document, and pasted text arrives
 as plain text without its original formatting.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [receiveContent, onTextContextMenuItem] -->
+
+On iOS, paste from the menu that appears when you tap or select in the text
+area. A pasted image is inserted in the document and saved as PNG unless it is
+already PNG or JPEG. Pasted text keeps its formatting on screen, but saving
+keeps only the formatting the document format can hold, such as fonts, sizes,
+colors, bold, italic, underline, and strikethrough. A pasted item that is not
+an image, such as a file, stops the save with **Save Failed** until you remove
+it.
+<!-- Verified from: platform/ios/plain_rtf/RichTextEditor.swift [makeUIView]; platform/ios/plain_rtf/PlainTextRTFText.swift [document(from:), style(from:), image(from:attributes:)] -->
 
 ### Drop image files into a note
 
@@ -420,6 +535,11 @@ Home screen shows the app's privacy policy, and its
 **Contact Plain Text Office** button opens the contact page on our website.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [HELP_SECTIONS, HelpScreen, PrivacyScreen, CONTACT_URL]; platform/android/app/src/main/res/values/strings.xml -->
 
+The iOS app has no help screen; use this manual. **Privacy** on the Home
+screen shows the app's privacy policy, and its **Contact Plain Text Office**
+link opens the contact page on our website.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/PrivacyPolicyView.swift [PrivacyPolicyButton, PrivacyPolicyView] -->
+
 ### Send feedback
 
 On Android, you can report a bug or request a feature from inside the app:
@@ -435,6 +555,14 @@ The app sends nothing itself; the message goes only if you send it. If no
 email app is set up, the screen shows the address so that you can write from
 another device.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/Feedback.kt [FEEDBACK_ADDRESS, draftFeedbackEmail, openFeedbackEmail]; platform/android/app/src/main/res/values/strings.xml [feedback_body, feedback_report_bug, feedback_request_feature, feedback_no_email_app] -->
+
+On iOS, tap **Send Feedback** at the top of the Home screen. **Report a bug**
+and **Request a feature** open a message to `support@plaintxtoffice.com` in
+your email app, with the app version, your iOS version, and your device model
+filled in; your documents are not included. **Open contact form** opens the
+contact page in your browser instead. If no email app is set up, the screen
+says so and suggests **Open contact form**. Tap **Done** to close it.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/Feedback.swift [Feedback, FeedbackView] -->
 
 The Windows program has no feedback command. Use the
 [contact form](https://plaintxtoffice.com/contact/) instead.
@@ -470,6 +598,11 @@ export folder. Repeated image insertions add more images; they do not replace
 earlier copies. Saving overwrites the destination file. For the native file
 layout and a complete text example, see [Your Data Files](#your-data-files).
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document_as]; platform/windows/plain_rtf/gui/views/images.py [insert_image_at]; platform/windows/plain_rtf/adapters/files.py [write_rtf] -->
+
+On iOS, use **Open Existing** and **Save** for native documents, and paste to
+bring in images or text. The iOS app reads and writes the same Plain Text RTF
+files as the other apps, so documents can move between them.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/PlainTextRTF.swift [parse, format] -->
 
 ## Commands and Shortcuts
 
@@ -545,6 +678,21 @@ work in the editor:
 | **Ctrl+Y** or **Ctrl+Shift+Z** | Redo. |
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [onKeyDown, onKeyShortcut]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorController.kt [onShortcut]; platform/android/app/src/main/res/values/strings.xml [help_shortcuts_body] -->
 
+### Use iOS buttons
+
+The iOS commands are the top-bar and toolbar buttons listed in
+[Getting Around](#getting-around). The app defines no keyboard shortcuts of its
+own.
+
+| Button | Where | What it does |
+| --- | --- | --- |
+| **Back** | Editor top bar | Returns to the Home screen, offering to keep or discard unsaved changes. |
+| **Save** | Editor top bar | Saves to the current file, or asks where to save a new or renamed document. |
+| **Bold**, **Italic**, **Underline** | Format toolbar | Switches the style on the selection or for what you type next. |
+| **Font Size**, **Text Color** | Format toolbar | Changes the selected text's size or color. |
+| **Lists** | Format toolbar | Adds or removes bullet or number markers on the current or selected lines. |
+<!-- Verified from: platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar] -->
+
 ## Your Data Files
 
 ### Locate documents and diagnostic logs
@@ -555,7 +703,7 @@ work in the editor:
 | Original image files | Wherever you selected them. | Read when inserted; the document stores its own image content. |
 | `logs/rtf-editor.log` | Windows only: under `plain-rtf-data/` beside a portable executable; under `%LOCALAPPDATA%/plain-rtf/` for an installed application. | Diagnostic output. Read it when investigating problems; it is not a document or preferences file. |
 | `logs/rtf-editor.1.log` through `logs/rtf-editor.3.log` | Beside the main log. | Older diagnostic output retained as the log rotates at approximately 1,000,000 bytes. |
-| Recovery drafts | Android only: the app's own storage on the device. | Hold unsaved changes until you save or discard them. Manage them from the Home screen, not by hand. |
+| Recovery drafts | Android and iOS: the app's own storage on the device. | Hold unsaved changes until you save or discard them. Manage them from the Home screen, not by hand. |
 <!-- Verified from: platform/windows/plain_rtf/adapters/files.py [read_rtf, write_rtf]; platform/windows/plain_rtf/gui/views/root_window.py [_save_document_as]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [_format_image]; platform/windows/plain_rtf/gui/app.py [launch_app]; platform/windows/plain_rtf/config/path_handler.py [LOGS_DIR, APP_ROOT]; platform/windows/plain_rtf/config/logging/log_config.py [configure_logging, _rotating_handler_factory]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [Factory]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DraftStore.kt -->
 
 On Android, you choose where each document is saved in Android's file picker.
@@ -564,6 +712,13 @@ or synchronized by that provider. Recovery drafts are left out of Android
 device backups and transfers, and uninstalling the app removes them. Documents
 you saved are separate and stay where they are.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/PlainRtfApp.kt [PlainRtfApp]; platform/android/app/src/main/AndroidManifest.xml [allowBackup]; platform/android/app/src/main/res/xml/backup_rules.xml; platform/android/app/src/main/res/xml/data_extraction_rules.xml; platform/android/app/src/main/res/values/strings.xml [privacy_saving_body, privacy_removing_body] -->
+
+On iOS, you choose where each document is saved in the file browser. A file in
+iCloud Drive or with another provider may be uploaded or synchronized by that
+provider. Recovery drafts are kept in the app's own storage, which is included
+in iPhone backups, and deleting the app removes them. Documents you saved are
+separate and stay where they are.
+<!-- Verified from: platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/SaveProtection.swift [DraftStore.standard]; platform/ios/plain_rtf/PrivacyPolicyView.swift [PrivacyPolicyView] -->
 
 The Windows portable executable needs a writable folder. Its application data
 stays beside it and is not redirected to AppData if that folder cannot be
@@ -663,7 +818,10 @@ bytes are contained in the file, not referenced by a separate filename.
 | A list keeps adding markers when you press **Enter**. | The current line is a recognized list item. | Press **Enter** on an empty list item, or toggle the matching list command to remove markers. |
 | A wide image appears smaller. | Image display is reduced to fit the text area. | This is expected; PNG and JPEG source bytes are preserved in the document. |
 | On Android, **Send feedback** reports that no email app is set up on this device. | Feedback is sent through your own email app. | Write to the address shown from any other device. |
-<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _set_font_family, _set_font_size, _set_text_color, _set_background_color, _toggle_style, _insert_image, _handle_drop]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes, insert_image_at]; platform/windows/plain_rtf/gui/views/text_buffer.py [handle_return_in_list]; platform/windows/plain_rtf/domains/documents/images.py [decode_image]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/res/values/strings.xml [feedback_no_email_app] -->
+| On iOS, **Send Feedback** reports that no email app is set up on this device. | Feedback is sent through your own email app. | Tap **Open contact form** and write from the browser. |
+| On iOS, **Save Failed** says the document contains an attachment that is not an image. | Something other than an image, such as a file, was pasted into the document. | Delete that item and save again. Your unsaved changes stay in the recovery draft. |
+| On iOS, an alert reads **Open Failed** instead of **Open failed**. | iOS capitalizes the title; the messages are the same. | Use the **Open failed** rows in the first table. |
+<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _set_font_family, _set_font_size, _set_text_color, _set_background_color, _toggle_style, _insert_image, _handle_drop]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes, insert_image_at]; platform/windows/plain_rtf/gui/views/text_buffer.py [handle_return_in_list]; platform/windows/plain_rtf/domains/documents/images.py [decode_image]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/res/values/strings.xml [feedback_no_email_app]; platform/ios/plain_rtf/Feedback.swift [FeedbackView]; platform/ios/plain_rtf/PlainTextRTFText.swift [image(from:attributes:)]; platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/PlainTextRTF.swift [PlainTextRTFError] -->
 
 For file errors, use the dialog's message first. The Windows diagnostic log
 location is listed above, but open/save errors are shown in dialogs and are
@@ -690,6 +848,10 @@ until you save or discard them, and the Home screen lists the drafts you can
 recover or delete.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/session/DocumentSession.kt [scheduleDraftWrite, persistDraft]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/res/values/strings.xml [help_recovery_body] -->
 
+On iOS, unsaved changes are kept in a recovery draft in the same way, and the
+Home screen lists the drafts you can recover.
+<!-- Verified from: platform/ios/plain_rtf/RTFDocument.swift [schedulePersistDraft, persistDraft]; platform/ios/plain_rtf/HomeView.swift [HomeView] -->
+
 ### Do I need to send image files with my document?
 
 No. Inserted images are embedded in the saved document as PNG or JPEG data.
@@ -706,8 +868,9 @@ colors. There is no custom size entry field or color picker in the menus.
 
 The command enables bold across the selection unless every selected character
 is already bold, in which case it removes bold. Italic, underline, and
-strikethrough follow the same rule.
-<!-- Verified from: platform/windows/plain_rtf/gui/views/text_buffer.py [toggle_selection_style] -->
+strikethrough follow the same rule. On iOS, each part of a mixed selection
+switches on its own instead.
+<!-- Verified from: platform/windows/plain_rtf/gui/views/text_buffer.py [toggle_selection_style]; platform/ios/plain_rtf/FormatToolbar.swift [applyTrait, toggleUnderline] -->
 
 ### Are tables and lists special document objects?
 
@@ -725,6 +888,6 @@ edit their text directly, and list commands help add or remove the prefixes.
 | Inline formatting | Font, size, colors, bold, italic, underline, or strikethrough applied to text. |
 | Embedded image | Image content stored inside the document file. |
 | Marker | A `[[...]]` instruction in the native file that describes styling or an image. |
-| Unsaved changes | Edits not yet written to the document's file, indicated by a leading `*` in the title on Windows and by **Unsaved changes** in the status line on Android. |
-| Recovery draft | The Android app's copy of a document's unsaved changes, kept on the device until you save or discard them. |
+| Unsaved changes | Edits not yet written to the document's file, indicated by a leading `*` in the title on Windows, by **Unsaved changes** in the status line on Android, and by **Unsaved** at the bottom of the editor on iOS. |
+| Recovery draft | The Android or iOS app's copy of a document's unsaved changes, kept on the device until you save or discard them. |
 <!-- Verified from: platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [FORMAT_HEADER, _format_styled_text, _format_image]; platform/windows/plain_rtf/gui/views/text_buffer.py [_look_selection_range]; platform/windows/plain_rtf/gui/views/images.py [insert_image_bytes_at_cursor]; platform/windows/plain_rtf/gui/views/root_window.py [_update_title]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorStatusBar]; platform/android/app/src/main/res/values/strings.xml [help_recovery_body] -->
