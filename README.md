@@ -2,7 +2,7 @@
 <!-- Authoring guidance: dev-docs/specs/README_SPEC.instructions.md -->
 <!-- rumdl-disable MD033 MD041 -->
 <p align="center">
-  <img src="assets/icons/icon.svg" alt="Plain RTF icon showing a diamond inside a blue speech bubble" width="96">
+  <img src="assets/icons/icon-github-readme.svg" alt="Plain RTF icon showing a diamond inside a blue speech bubble" width="96">
 </p>
 
 <h1 align="center">Plain RTF</h1>

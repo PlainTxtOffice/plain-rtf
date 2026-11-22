@@ -347,6 +347,7 @@ already in a document is kept when you save.
 ### Change the font, size, or colors
 
 1. Select the text to change.
+
 1. Choose the appropriate **Format** submenu on Windows, or the toolbar button
    with the same name on Android, and then a value:
 
