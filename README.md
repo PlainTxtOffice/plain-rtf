@@ -56,24 +56,19 @@ full syntax.
 
 Click a screenshot to view it full size.
 
-### Windows
-
-[![Plain RTF displaying formatted text, a list, and an embedded image](docs/images/plain-rtf-screenshot.jpg)](docs/images/plain-rtf-screenshot.jpg)
-
-### Android
-
 <!-- rumdl-disable MD033 -->
-<p>
-  <a href="platform/android/assets/screenshots/phone-1-editor.png"><img src="platform/android/assets/screenshots/phone-1-editor.png" alt="Plain RTF on Android editing a note with headings, bold and colored text, a bulleted list, and an embedded image" width="300"></a>
-</p>
-<!-- rumdl-enable MD033 -->
-
-### iOS
-
-<!-- rumdl-disable MD033 -->
-<p>
-  <a href="platform/ios/assets/screenshots/01-editor.png"><img src="platform/ios/assets/screenshots/01-editor.png" alt="Plain RTF on iPhone editing a garden plan with an image, colored list items, a numbered list, a table, and highlighted text" width="300"></a>
-</p>
+<table>
+  <tr>
+    <th>Windows</th>
+    <th>Android</th>
+    <th>iOS</th>
+  </tr>
+  <tr>
+    <td valign="top"><a href="docs/images/plain-rtf-screenshot.jpg"><img src="docs/images/plain-rtf-screenshot.jpg" alt="Plain RTF on Windows displaying formatted text, a list, and an embedded image" width="400"></a></td>
+    <td valign="top"><a href="platform/android/assets/screenshots/phone-1-editor.png"><img src="platform/android/assets/screenshots/phone-1-editor.png" alt="Plain RTF on Android editing a note with headings, bold and colored text, a bulleted list, and an embedded image" width="165"></a></td>
+    <td valign="top"><a href="platform/ios/assets/screenshots/01-editor.png"><img src="platform/ios/assets/screenshots/01-editor.png" alt="Plain RTF on iPhone editing a garden plan with an image, colored list items, a numbered list, a table, and highlighted text" width="165"></a></td>
+  </tr>
+</table>
 <!-- rumdl-enable MD033 -->
 
 ## Download
