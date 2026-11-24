@@ -90,7 +90,7 @@ shortcuts, file-format details, and troubleshooting.
 ## Feedback
 
 Send bug reports and feature requests to
-[support@plaintxtoffice.com](mailto:support@plaintxtoffice.com) or through the
+[feedback@plaintxtoffice.com](mailto:feedback@plaintxtoffice.com) or through the
 [contact page](https://plaintxtoffice.com/contact/). In the Android app, tap
 **Send feedback** on the Home screen or in the editor's menu. In the iOS app,
 tap **Send Feedback** at the top of the Home screen. The Windows app has no

@@ -1,9 +1,9 @@
 ---
-last_updated: 2026-11-22
+last_updated: 2026-11-23
 version: 6.0.0
 product_versions:
   windows: "0.1.0"
-  ios: "1.0.1"
+  ios: "1.1.0"
   android: "1.0.2"
 generated_from: "dev-docs/specs/USER_MANUAL_SPEC.instructions.md"
 ---
@@ -172,7 +172,7 @@ The iOS app also has a Home screen and an editor screen:
 | Home screen | **Create New Document**, **Open Existing**, and a **Recover:** button for each recovery draft. The buttons at the top open **Privacy** and **Send Feedback**. |
 | Editor top bar | **Back**, the document name, which you can tap to rename, and **Save** (the tray with a downward arrow). |
 | Bottom of the editor | Shows **Unsaved** while the document has unsaved changes. |
-| Format toolbar | Sits above the keyboard and scrolls sideways: **Bold**, **Italic**, **Underline**, **Font Size**, **Text Color**, and **Lists**. |
+| Format toolbar | Sits above the keyboard and scrolls sideways: **Bold**, **Italic**, **Underline**, **Font Size**, **Text Color**, and **Lists**. **Alignment** and **Insert Image** are in development for the next iOS release. |
 <!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/PrivacyPolicyView.swift [PrivacyPolicyButton]; platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/RichTextEditor.swift [makeUIView]; platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar] -->
 
 In the task steps below, menu paths such as **Format > Bold** are the Windows
@@ -250,7 +250,36 @@ On iOS, tap **Open Existing** on the Home screen and choose the file in the
 file browser, which lists `.rtf` files. To open another document while one is
 open, tap **Back** first. A file that cannot be opened shows **Open Failed**
 with the reason.
-<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/RTFDocument.swift [init(fileURL:draftStore:)]; platform/ios/plain_rtf/SaveProtection.swift [RTFSerialization] -->
+
+In development for the next iOS release: you can also open an `.rtf` file from
+the Files app. Touch and hold the file, tap **Open With**, then **Plain RTF**.
+**Save** then writes to that same file. If another document is open with
+unsaved changes, they are kept as a recovery draft and the new file opens in
+its place. iOS 1.0.1 is not listed under **Open With**.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView, open]; platform/ios/plain_rtf/Info.plist [CFBundleDocumentTypes, LSSupportsOpeningDocumentsInPlace]; platform/ios/plain_rtf/RTFDocument.swift [init(fileURL:draftStore:), persistDraft]; platform/ios/plain_rtf/SaveProtection.swift [RTFSerialization] -->
+
+### Open a Microsoft RTF file on iOS (in development)
+
+iOS 1.0.1 refuses Microsoft RTF files with **Open Failed**. This task is in
+development for the next iOS release. Windows and Android cannot open
+Microsoft RTF.
+
+1. Open the file with **Open Existing**, or from the Files app with
+   **Open With**.
+1. Read **Converted from Microsoft RTF** and tap **OK**.
+1. Tap **Save** and choose where to keep the converted copy.
+
+The app converts the file to Plain Text RTF and opens it as a new unsaved
+document named after the file. Text, fonts, sizes, colors, bold, italic,
+underline, strikethrough, and alignment are kept, and black text takes the
+default text color. Pictures are left out. Tables, links, and list markers may
+come through as plain text or not at all. A file written on a Mac can open
+with larger text than it had there.
+
+The original file is not changed. **Save** always asks where to store the
+copy; if you pick the same folder and name, iOS asks whether to replace the
+original or keep both. The app does not write Microsoft RTF.
+<!-- Verified from: platform/ios/plain_rtf/MicrosoftRTFImport.swift [isMicrosoftRTF, document(from:)]; platform/ios/plain_rtf/RTFDocument.swift [init(fileURL:draftStore:), wasConvertedFromMicrosoftRTF]; platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtfTests/MicrosoftRTFImportTests.swift [embeddedPictureIsLeftOut] -->
 
 ### Save your changes
 
@@ -417,6 +446,25 @@ another kind. To extend a list, type the marker yourself, or select the lines
 and apply the list again. The indent is restored when you reopen the document.
 <!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [toggleBulletList, toggleNumberedList, setListIndent]; platform/ios/plain_rtf/PlainTextRTFText.swift [applyListIndents] -->
 
+### Align paragraphs on iOS (in development)
+
+iOS 1.0.1 has no alignment command. This task is in development for the next
+iOS release.
+
+1. Put the cursor in a paragraph, or select several paragraphs.
+1. Tap **Alignment** on the toolbar.
+1. Choose **Left**, **Center**, **Right**, or **Justify**.
+
+The whole paragraph is aligned, including any image in it, and the toolbar
+button shows the alignment at the cursor. Text you type next keeps that
+alignment. **Left** is the default. Alignment is saved in the document, and a
+list keeps its indent.
+
+Windows and Android have no alignment command. They open a document aligned on
+iOS with every paragraph on the left, and saving it there removes the
+alignment.
+<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar, applyAlignment]; platform/ios/plain_rtf/TextEditorContext.swift [refreshFormattingState]; platform/ios/plain_rtf/PlainTextRTF.swift [Alignment, alignedByParagraph, styleAttributes, imageMarker]; platform/ios/plain_rtf/PlainTextRTFText.swift [textAlignment, alignment, applyListIndents]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [_parse_style]; docs/PLAIN_RTF_SPEC.md [Paragraph Alignment] -->
+
 ### Insert and edit a simple table
 
 1. Put the cursor where the table should begin.
@@ -462,10 +510,17 @@ formats are converted to PNG or JPEG, and large photos are scaled down to keep
 the file small.
 <!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [EditorScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/AppViewModel.kt [insertImages]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/adapters/EmbeddedImages.kt [ImageImporter.fromBytes, MAX_PHOTO_EDGE_PX]; platform/android/app/src/main/res/values/strings.xml [format_image, status_inserted_image, help_editing_body] -->
 
-iOS has no **Insert image** command; paste an image instead, as described in
-the next task. Images in a document open there, and wide images are shown
-smaller while their saved size stays the same.
-<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar]; platform/ios/plain_rtf/PlainTextRTFText.swift [maximumImageWidth, attributedImage] -->
+iOS 1.0.1 has no **Insert image** command; paste an image instead, as described
+in the next task. In development for the next iOS release: tap the
+**Insert Image** toolbar button and pick one image in the photo picker. The
+image appears at the insertion point and replaces any selected text. PNG images
+are stored as they are. Camera photos are stored as JPEG, and photos larger than
+2560 pixels on their longest side are scaled down to keep the file small. Other
+image formats are converted to PNG. The place a photo was taken is never stored
+in the document. An image that cannot be read produces **Insert Image Failed**.
+Wide images are shown smaller in the editor while their saved size stays the
+same.
+<!-- Verified from: platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar]; platform/ios/plain_rtf/EditorView.swift [EditorView, insertImage]; platform/ios/plain_rtf/ImageImport.swift [ImageImport.image, maximumPhotoEdge, withoutLocation, TextEditorContext.insert]; platform/ios/plain_rtf/PlainTextRTFText.swift [maximumImageWidth, attributedImage] -->
 
 ### Paste an image or text
 
@@ -573,9 +628,11 @@ layout and a complete text example, see [Your Data Files](#your-data-files).
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document_as]; platform/windows/plain_rtf/gui/views/images.py [insert_image_at]; platform/windows/plain_rtf/adapters/files.py [write_rtf] -->
 
 On iOS, use **Open Existing** and **Save** for native documents, and paste to
-bring in images or text. The iOS app reads and writes the same Plain Text RTF
-files as the other apps, so documents can move between them.
-<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/PlainTextRTF.swift [parse, format] -->
+bring in images or text. **Insert Image**, which brings in a photo, is in
+development for the next iOS release. The
+iOS app reads and writes the same Plain Text RTF files as the other apps, so
+documents can move between them.
+<!-- Verified from: platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar]; platform/ios/plain_rtf/PlainTextRTF.swift [parse, format] -->
 
 ## Commands and Shortcuts
 
@@ -664,6 +721,8 @@ own.
 | **Bold**, **Italic**, **Underline** | Format toolbar | Switches the style on the selection or for what you type next. |
 | **Font Size**, **Text Color** | Format toolbar | Changes the selected text's size or color. |
 | **Lists** | Format toolbar | Adds or removes bullet or number markers on the current or selected lines. |
+| **Alignment** (in development) | Format toolbar | Aligns the current or selected paragraphs left, center, right, or justified. |
+| **Insert Image** (in development) | Format toolbar | Opens the photo picker and inserts the image you choose. |
 <!-- Verified from: platform/ios/plain_rtf/EditorView.swift [EditorView]; platform/ios/plain_rtf/FormatToolbar.swift [FormatToolbar] -->
 
 ## Your Data Files
@@ -809,6 +868,11 @@ No. The native format requires the `PTRTF/1` header and has its own formatting
 markers. The `.rtf` extension alone does not establish compatibility.
 <!-- Verified from: platform/windows/plain_rtf/gui/menus/help.py [RTF_SUPPORT_TEXT]; platform/windows/plain_rtf/domains/documents/plain_text_rtf.py [parse_plain_text_rtf] -->
 
+On iOS, converting a Microsoft RTF file when you open it is in development for
+the next release; see
+[Open a Microsoft RTF file on iOS](#open-a-microsoft-rtf-file-on-ios-in-development).
+<!-- Verified from: platform/ios/plain_rtf/MicrosoftRTFImport.swift [document(from:)] -->
+
 ### Does the editor save automatically?
 
 Not to the document's file. Use **Save** or **Save As...**. On Windows, New,
@@ -854,7 +918,7 @@ edit their text directly, and list commands help add or remove the prefixes.
 ## Feedback
 
 Send bug reports and feature requests to
-[support@plaintxtoffice.com](mailto:support@plaintxtoffice.com) or through the
+[feedback@plaintxtoffice.com](mailto:feedback@plaintxtoffice.com) or through the
 [contact page](https://plaintxtoffice.com/contact/) from any device. The
 Android and iOS apps also have a feedback screen.
 
@@ -868,13 +932,13 @@ Android and iOS apps also have a feedback screen.
 ### Send feedback on Windows (in development)
 
 The Windows release available now, version 0.1.0, has no feedback command;
-write to `support@plaintxtoffice.com` or use the
+write to `feedback@plaintxtoffice.com` or use the
 [contact form](https://plaintxtoffice.com/contact/). The next Windows release
 adds a feedback dialog:
 
 1. Choose **Help > Send Feedback...**.
 1. Click **Report a Bug** or **Request a Feature**. Your email app opens a
-   message to `support@plaintxtoffice.com` with the app version and your
+   message to `feedback@plaintxtoffice.com` with the app version and your
    Windows version filled in; your documents are not included.
 1. Review or change it, then send it. Nothing is sent unless you send it.
 1. To use the website instead, click **Open Contact Form**.
@@ -897,8 +961,9 @@ another device.
 ### Send feedback on iOS
 
 Tap **Send Feedback** at the top of the Home screen. **Report a bug** and
-**Request a feature** open a message to `support@plaintxtoffice.com` in
-your email app, with the app version, your iOS version, and your device model
+**Request a feature** open a message to `feedback@plaintxtoffice.com` in
+your email app (`support@plaintxtoffice.com` in version 1.0.1 and earlier),
+with the app version, your iOS version, and your device model
 filled in; your documents are not included. **Open contact form** opens the
 contact page in your browser instead. If no email app is set up, the screen
 says so and suggests **Open contact form**. Tap **Done** to close it.

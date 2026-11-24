@@ -1,6 +1,6 @@
 ---
-last_updated: 2026-10-21
-version: 1.0.0
+last_updated: 2026-11-23
+version: 1.1.0
 format_version: "PTRTF/1"
 product_version: "0.1.0"
 ---
@@ -16,6 +16,11 @@ Plain Text RTF is a custom format, not Microsoft Rich Text Format. The app
 normally uses the `.rtf` extension, but changing a file's extension does not
 convert its contents. Microsoft RTF control words and groups are not supported.
 See the [user manual](USER_MANUAL.md) for editor operations.
+
+Paragraph alignment (the `align` attribute) was added in revision 1.1.0 of this
+document. The iOS app reads and writes it. The Windows and Android apps do not
+yet: they open such files, show every paragraph in the default alignment, and
+drop `align` when they save. See [Paragraph Alignment](#paragraph-alignment).
 
 ## Encoding and Header
 
@@ -95,6 +100,7 @@ their defaults. After `[[/]]`, ordinary text returns to the default style.
 | `underline` | `true` | Any other value or absence means off. |
 | `strikethrough` | `true` | Any other value or absence means off. |
 | `background` | Lowercase `#rrggbb`, such as `#fff59d` | Invalid or absent means editor default. |
+| `align` | `center`, `right`, or `justify` | Any other value or absence means editor default. |
 
 Unknown style attributes are ignored. Invalid style values fall back per field;
 they do not invalidate the whole marker. For example, `color=#FF0000` is ignored
@@ -116,6 +122,49 @@ Writers should emit ordinary ASCII decimal digits without leading zeros. No
 format-level upper bound is specified; runtime limits can still reject values
 or make them impractical to render.
 
+## Paragraph Alignment
+
+`align` describes a whole paragraph, although it is written on style spans and
+image markers. It adds no marker syntax, so a reader that does not know it
+ignores it as an unknown attribute.
+
+A paragraph is the text between line feeds, and the line feed that ends a
+paragraph belongs to it. The last paragraph has no line feed. An image counts
+as one character.
+
+| Value | Meaning |
+| --- | --- |
+| `center` | Lines are centered. |
+| `right` | Lines end at the right margin. |
+| `justify` | Lines are spread to both margins, except the last. |
+| Absent | The editor default: left for left-to-right text. |
+
+Any other value, including `left`, an empty value, and different letter case,
+means the default.
+
+The reader gives each paragraph the `align` value of its first character. That
+character is styled text, a line feed, or an image. `align` on a later span or
+image in the same paragraph is ignored there. A span that crosses a line feed
+supplies its value to every paragraph that starts inside it. An image marker
+may carry its own `align`; without one, an image inside a style span takes that
+span's value, and an image outside a span has the default.
+
+The writer puts the paragraph's value on every style span and every image
+marker in the paragraph, including the span that holds its line feed. Text that
+is otherwise in the default style therefore gets a wrapper holding only
+`align`. The writer omits an empty wrapper whose only attribute is `align`.
+
+An empty paragraph keeps its alignment through its line feed. An empty last
+paragraph has no character, so it cannot carry alignment.
+
+```text
+PTRTF/1
+[[size=24;bold=true;align=center]]Title
+[[/]]Plain body text.
+[[align=right]]Signed,
+[[/]][[bold=true;align=right]]A. Writer[[/]]
+```
+
 ## Embedded Images
 
 An image marker is self-contained and has no end marker. It requires all four
@@ -128,14 +177,21 @@ attributes below, in any order:
 | `height` | Positive integer display height in pixels. |
 | `payload` | Standard Base64 encoding of the complete PNG or JPEG bytes. |
 
+One attribute is optional:
+
+| Attribute | Requirement |
+| --- | --- |
+| `align` | A [paragraph alignment](#paragraph-alignment) value. |
+
 The reader uses strict Base64 decoding: whitespace, line wrapping, and invalid
 Base64 characters are rejected. The decoded payload must load successfully
 with Pillow, and its detected format must match `image`. Actual pixel width
 and height come from the encoded image. The marker's dimensions describe the
 display size and may differ from those actual dimensions.
 
-Unknown additional image attributes are ignored. Style attributes on an image
-marker do not style surrounding text. An image inside a style span is accepted;
+Unknown additional image attributes are ignored. Style attributes other than
+`align` on an image marker have no effect, and none of them style surrounding
+text. An image inside a style span is accepted;
 the reader assigns that span's style to the internal image placeholder.
 
 PNG and JPEG are the only formats stored in image markers. The editor can
@@ -167,13 +223,15 @@ the entire model before emitting it.
 The writer emits the header and merges adjacent spans with equal styles,
 dropping empty input spans. Default-style text has no style wrapper. Nondefault
 text uses attributes in this order: `font`, `size`, `color`, `bold`, `italic`,
-`underline`, `strikethrough`, `background`. Unset fields and false flags are
-omitted. Image attributes are written as `image`, `width`, `height`, `payload`.
+`underline`, `strikethrough`, `background`, `align`. Unset fields and false
+flags are omitted. Image attributes are written as `image`, `width`, `height`,
+`align` when the paragraph has one, then `payload`.
 
 Images are emitted outside style wrappers. Styled text before and after an
 image is wrapped separately; this can produce empty style wrappers at image
 boundaries. An input image's placeholder style is consequently not guaranteed
-to survive a parse/write cycle. Stored image bytes and display dimensions are
+to survive a parse/write cycle, apart from its paragraph alignment, which the
+image marker carries. Stored image bytes and display dimensions are
 preserved by the codec for consistent models.
 
 Round trips preserve supported content rather than the original file spelling.
@@ -228,6 +286,14 @@ This specification is grounded in these implementation and test sources:
 - [Codec tests](../platform/windows/tests/domains/documents/test_plain_text_rtf.py)
   and [file tests](../platform/windows/tests/adapters/test_files.py): round
   trips and rejection cases.
+
+Paragraph alignment is grounded in the iOS implementation instead, until the
+Windows and Android codecs add it:
+
+- [iOS codec](../platform/ios/plain_rtf/PlainTextRTF.swift): `align` parsing,
+  the first-character rule (`alignedByParagraph`), and serialization.
+- [iOS codec tests](../platform/ios/plain_rtfTests/PlainTextRTFTests.swift):
+  alignment round trips, ignored values, and image markers.
 
 Changes to the codec should update this specification and relevant tests in
 the same change. A future incompatible syntax needs an explicit versioning
