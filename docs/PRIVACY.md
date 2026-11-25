@@ -1,3 +1,9 @@
+---
+privacy_updated:
+  android: "2026-11-25"
+  ios: "2026-10-02"
+---
+
 # Plain RTF privacy policy — publication draft
 
 <!-- Covers the iOS app only. Add other platforms once they exist. -->
