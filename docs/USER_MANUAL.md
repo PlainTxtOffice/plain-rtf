@@ -1,10 +1,10 @@
 ---
-last_updated: 2026-11-23
-version: 6.0.0
+last_updated: 2026-11-25
+version: 6.1.0
 product_versions:
   windows: "0.1.0"
   ios: "1.1.0"
-  android: "1.0.2"
+  android: "1.0.3"
 generated_from: "dev-docs/specs/USER_MANUAL_SPEC.instructions.md"
 ---
 
@@ -383,8 +383,8 @@ already in a document is kept when you save.
    | Submenu or button | Choices on Windows | Choices on Android |
    | --- | --- | --- |
    | **Font** | **Automatic**, followed by the font families available on your computer. | **Automatic**, **Sans serif (Arial)**, **Serif (Times New Roman)**, **Monospace (Courier New)**. |
-   | **Font Size** | **Automatic**, **10 pt**, **11 pt**, **12 pt**, **14 pt**, **18 pt**. | The same, plus **24 pt** and **36 pt**. |
-   | **Text Color** | **Automatic**, **Black**, **Red**, **Green**, **Blue**. | The same. |
+   | **Font Size** | **Automatic**, **10 pt**, **11 pt**, **12 pt**, **14 pt**, **18 pt**. | **Automatic**, **10 pt**, **11 pt**, **12 pt**, **14 pt**, **16 pt**, **18 pt**, **20 pt**, **24 pt**, **28 pt**, **32 pt**, **36 pt**, **48 pt**. |
+   | **Text Color** | **Automatic**, **Black**, **Red**, **Green**, **Blue**. | The same, plus **Orange** and **Purple**. |
    | **Background Color** | **Automatic**, **Yellow**, **Green**, **Blue**. | The same. |
 
 1. Review the selection. To reset that particular attribute, choose
@@ -438,6 +438,12 @@ Lists are ordinary text prefixes. Automatic continuation recognizes `•`, `·`,
 the beginning of the line. Continuing a numbered item increases its number by
 one. Renumbering later lines after edits is not automatic.
 <!-- Verified from: platform/windows/plain_rtf/gui/views/text_buffer.py [_BULLET_RE, _NUMBER_RE, handle_return_in_list] -->
+
+On Android, the wrapped lines of a list item are indented to line up with the
+text after its marker. A marker followed by a tab, as iOS writes it, gets the
+same indent, and those lines are not shown as a table. The indent comes from
+the editor and is not saved in the file.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [listIndents, refreshListIndents, refreshTabStops]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/editing/TextCommands.kt [listParagraphs]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/domain/editing/TableBlocks.kt [tableBlocks] -->
 
 On iOS, the list commands start each line with `•` or a number and a period,
 followed by a tab, and indent the wrapped text. Pressing **Return** does not
@@ -534,9 +540,15 @@ the first readable image is inserted. A successful image paste reports
 <!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_build_editor, _handle_paste]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes] -->
 
 On Android, paste from the menu that appears when you tap or select in the
-text area. A pasted image is inserted in the document, and pasted text arrives
-as plain text without its original formatting.
-<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [receiveContent, onTextContextMenuItem] -->
+text area, or press **Ctrl+V** on a hardware keyboard. A pasted image is
+inserted in the document. Text copied in Plain RTF pastes with its formatting
+and images. Text copied from another app keeps the formatting the document
+format can hold: fonts, sizes, text and background colors, bold, italic,
+underline, and strikethrough. Links and other formatting are dropped, and so
+is a white background from a web page. **Paste as plain text** pastes without
+formatting, and text dropped from another app or inserted by the keyboard
+arrives as plain text.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/RichEditText.kt [receiveContent, onTextContextMenuItem, paste, insertContent]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/PastedText.kt [pastedText, styleOf] -->
 
 On iOS, paste from the menu that appears when you tap or select in the text
 area. A pasted image is inserted in the document and saved as PNG unless it is
@@ -589,7 +601,7 @@ then **Help** in the editor. One screen holds **About Plain RTF**,
 **Keyboard shortcuts**. Tap **Back** to return. The **Privacy** icon on the
 Home screen shows the app's privacy policy, and its
 **Contact Plain Text Office** button opens the contact page on our website.
-<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [HELP_SECTIONS, HelpScreen, PrivacyScreen, CONTACT_URL]; platform/android/app/src/main/res/values/strings.xml -->
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [HELP_SECTIONS, HelpScreen, PrivacyScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/Feedback.kt [CONTACT_FORM_URL, openContactForm]; platform/android/app/src/main/res/values/strings.xml -->
 
 The iOS app has no help screen; use this manual. **Privacy** on the Home
 screen shows the app's privacy policy, and its **Contact Plain Text Office**
@@ -849,11 +861,11 @@ bytes are contained in the file, not referenced by a separate filename.
 | Pasting copied files inserts only one image. | Clipboard file paste selects the first readable image. | Drop multiple files onto the editor to insert several images. |
 | A list keeps adding markers when you press **Enter**. | The current line is a recognized list item. | Press **Enter** on an empty list item, or toggle the matching list command to remove markers. |
 | A wide image appears smaller. | Image display is reduced to fit the text area. | This is expected; PNG and JPEG source bytes are preserved in the document. |
-| On Android, **Send feedback** reports that no email app is set up on this device. | Feedback is sent through your own email app. | Write to the address shown from any other device. |
+| On Android, **Send feedback** reports that no email app is set up on this device. | Feedback is sent through your own email app. | Tap **Open contact form** and write from the browser, or write to the address shown from any other device. |
 | On iOS, **Send Feedback** reports that no email app is set up on this device. | Feedback is sent through your own email app. | Tap **Open contact form** and write from the browser. |
 | On iOS, **Save Failed** says the document contains an attachment that is not an image. | Something other than an image, such as a file, was pasted into the document. | Delete that item and save again. Your unsaved changes stay in the recovery draft. |
 | On iOS, an alert reads **Open Failed** instead of **Open failed**. | iOS capitalizes the title; the messages are the same. | Use the **Open failed** rows in the first table. |
-<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _set_font_family, _set_font_size, _set_text_color, _set_background_color, _toggle_style, _insert_image, _handle_drop]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes, insert_image_at]; platform/windows/plain_rtf/gui/views/text_buffer.py [handle_return_in_list]; platform/windows/plain_rtf/domains/documents/images.py [decode_image]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/res/values/strings.xml [feedback_no_email_app]; platform/ios/plain_rtf/Feedback.swift [FeedbackView]; platform/ios/plain_rtf/PlainTextRTFText.swift [image(from:attributes:)]; platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/PlainTextRTF.swift [PlainTextRTFError] -->
+<!-- Verified from: platform/windows/plain_rtf/gui/views/root_window.py [_save_document, _set_font_family, _set_font_size, _set_text_color, _set_background_color, _toggle_style, _insert_image, _handle_drop]; platform/windows/plain_rtf/gui/views/images.py [look_clipboard_image_bytes, insert_image_at]; platform/windows/plain_rtf/gui/views/text_buffer.py [handle_return_in_list]; platform/windows/plain_rtf/domains/documents/images.py [decode_image]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/res/values/strings.xml [feedback_no_email_app, feedback_no_browser]; platform/ios/plain_rtf/Feedback.swift [FeedbackView]; platform/ios/plain_rtf/PlainTextRTFText.swift [image(from:attributes:)]; platform/ios/plain_rtf/HomeView.swift [HomeView]; platform/ios/plain_rtf/PlainTextRTF.swift [PlainTextRTFError] -->
 
 For file errors, use the dialog's message first. The Windows diagnostic log
 location is listed above, but open/save errors are shown in dialogs and are
@@ -952,11 +964,12 @@ adds a feedback dialog:
 1. Your email app opens a draft email to Plain Text Office that includes the
    app version, your Android version, and your device model. Review or change
    it, then send it.
+1. To use the website instead, tap **Open contact form**.
 
 The app sends nothing itself; the message goes only if you send it. If no
-email app is set up, the screen shows the address so that you can write from
-another device.
-<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/Feedback.kt [FEEDBACK_ADDRESS, draftFeedbackEmail, openFeedbackEmail]; platform/android/app/src/main/res/values/strings.xml [feedback_body, feedback_report_bug, feedback_request_feature, feedback_no_email_app] -->
+email app or browser is set up, the screen says so and shows the address so
+that you can write from another device.
+<!-- Verified from: platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/home/HomeScreen.kt [HomeScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/editor/EditorScreen.kt [OverflowMenu]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/InfoScreens.kt [FeedbackScreen]; platform/android/app/src/main/kotlin/com/plaintxtoffice/plainrtf/ui/info/Feedback.kt [FEEDBACK_ADDRESS, CONTACT_FORM_URL, draftFeedbackEmail, openFeedbackEmail, openContactForm]; platform/android/app/src/main/res/values/strings.xml [feedback_body, feedback_report_bug, feedback_request_feature, feedback_contact_form, feedback_no_email_app, feedback_no_browser] -->
 
 ### Send feedback on iOS
 

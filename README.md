@@ -78,7 +78,7 @@ Click a screenshot to view it full size.
 | Windows (portable) | [plain-rtf.exe](https://github.com/PlainTxtOffice/plain-rtf/releases/latest/download/plain-rtf.exe) | Runs without installation. |
 | Windows (installer) | [plain-rtf-setup.exe](https://github.com/PlainTxtOffice/plain-rtf/releases/latest/download/plain-rtf-setup.exe) | |
 | Android | [Google Play](https://play.google.com/store/apps/details?id=com.plaintxtoffice.plainrtf) | Requires Android 9 or later. |
-| iOS | [App Store](https://apps.apple.com/app/id6837573461) | Version 1.0. Requires an iPhone with iOS 26.4 or later. |
+| iOS | [App Store](https://apps.apple.com/app/id6837573461) | Requires an iPhone with iOS 26.4 or later. |
 
 The Windows builds are for x64 (64-bit) and do not need Python installed.
 
@@ -93,7 +93,8 @@ Send bug reports and feature requests to
 [feedback@plaintxtoffice.com](mailto:feedback@plaintxtoffice.com) or through the
 [contact page](https://plaintxtoffice.com/contact/). In the Android app, tap
 **Send feedback** on the Home screen or in the editor's menu. In the iOS app,
-tap **Send Feedback** at the top of the Home screen. The Windows app has no
+tap **Send Feedback** at the top of the Home screen (version 1.0.1 drafts to
+<support@plaintxtoffice.com>). The Windows app has no
 feedback command; use email or the contact page.
 
 ## License
